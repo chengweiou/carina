@@ -1,0 +1,63 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.6.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'chengweiou.universe'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	maven {
+		url 'http://127.0.0.1:8001/repository/chengweiou/'
+		credentials {
+			username 'admin'
+			password 'admin123'
+		}
+	}
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'chengweiou.universe:blackhole:0.0.25@jar'
+	implementation 'com.google.code.gson:gson:2.8.5'
+	implementation 'org.apache.commons:commons-lang3:3.10'
+	
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-undertow'
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+configurations {
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+	implementation.exclude module: 'spring-boot-starter-tomcat'
+}
+
+test {
+	useJUnitPlatform()
+}

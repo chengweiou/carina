@@ -1,0 +1,15 @@
+server:
+  port: 0
+  servlet:
+    context-path: /carina
+
+spring:
+  jackson:
+    default-property-inclusion: NON_NULL
+  datasource:
+    url: jdbc:postgresql://pgsql/universe?currentSchema=carina
+    username: postgres
+    password: 123456
+
+site:
+  andromeda: http://127.0.0.1:60002/andromeda

@@ -1,0 +1,16 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    platform: h2
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=PostgreSQL
+
+jwt:
+  issuer: o
+  sign: andromeda
+  expMinute: 10
+
+site:
+  andromeda: http://127.0.0.1:60002/andromeda
