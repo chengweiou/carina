@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'chengweiou.universe:blackhole:0.0.25@jar'
+	implementation 'chengweiou.universe:blackhole:0.0.29@jar'
 	implementation 'com.google.code.gson:gson:2.8.5'
 	implementation 'org.apache.commons:commons-lang3:3.10'
 	
