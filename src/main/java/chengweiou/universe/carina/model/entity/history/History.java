@@ -18,10 +18,12 @@ public class History implements NotNullObj, Serializable {
     private Person sender;
     private HistoryType type;
     private String v;
+    private Boolean unread;
     private LocalDateTime updateAt;
 
     public void fillNotRequire() {
         type = type != null ? type : HistoryType.TEXT;
+        unread = unread != null ? unread : true;
     }
 
     public void updateAt() {

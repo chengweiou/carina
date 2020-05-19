@@ -5,13 +5,17 @@ import chengweiou.universe.blackhole.model.BasicRestCode;
 import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.carina.base.converter.Account;
+import chengweiou.universe.carina.config.ProjConfig;
 import chengweiou.universe.carina.data.Data;
 import chengweiou.universe.carina.model.ProjectRestCode;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.model.entity.person.Person;
+import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
 import chengweiou.universe.carina.model.entity.room.Room;
 import chengweiou.universe.carina.service.history.HistoryDio;
+import chengweiou.universe.carina.service.person.PersonDio;
+import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,18 +41,37 @@ public class MsgTest {
 	private Account loginAccount;
 	@Autowired
 	private HistoryDio historyDio;
+	@Autowired
+	private PersonDio personDio;
+	@Autowired
+	private PersonRoomRelateDio personRoomRelateDio;
+	@Autowired
+	private ProjConfig config;
 	@Test
 	public void send() throws Exception {
+		config.setServerHistory(false);
+
 		String result = mvc.perform(MockMvcRequestBuilders.post("/me/msg")
 				.header("loginAccount", new Gson().toJson(loginAccount))
-				.param("room.id", "2").param("v", "ctrl save")
+				.param("room.id", "1").param("v", "ctrl save")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result, Long.class);
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
 
+		result = mvc.perform(MockMvcRequestBuilders.get("/me/msg")
+				.header("loginAccount", new Gson().toJson(loginAccount))
+				.param("room.id", "1").param("v", "ctrl save")
+		).andReturn().getResponse().getContentAsString();
+		Rest<List> findRest = Rest.from(result, List.class);
+		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
+		Assertions.assertEquals(1, findRest.getData().size());
+
 		List<History> deleteList = historyDio.find(new SearchCondition(), Builder.set("room", Builder.set("id", 2).to(new Room())).to(new History()));
 		historyDio.delete(deleteList);
-		// todo 还原person表里面unread， personroomrelate.unread, message等
+		personDio.update(data.personList.get(0));
+		personDio.update(data.personList.get(1));
+		personRoomRelateDio.update(data.personRoomRelateList.get(0));
+		personRoomRelateDio.update(data.personRoomRelateList.get(1));
 	}
 
 	@Test

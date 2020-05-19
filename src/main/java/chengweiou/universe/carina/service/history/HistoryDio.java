@@ -43,6 +43,11 @@ public class HistoryDio {
         return dao.update(e);
     }
 
+    public long updateUnreadByRoomAndPerson(History e) {
+        e.updateAt();
+        return dao.updateByRoomAndPerson(e);
+    }
+
     public History findById(History e) {
         History result = dao.findById(e);
         return result!=null ? result : History.NULL;

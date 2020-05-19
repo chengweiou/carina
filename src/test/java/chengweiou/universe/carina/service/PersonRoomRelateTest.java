@@ -29,9 +29,7 @@ public class PersonRoomRelateTest {
 	private Data data;
 
 	@Test
-	public void saveDelete() throws FailException {
-		// todo enter room 如果是两人的新对话, 旧对话，如何找出。只有人的id, 没有roomid
-		PersonRoomRelate e = Builder.set("person", data.personList.get(0)).set("room", data.roomList.get(0)).set("name", "service test").to(new PersonRoomRelate());
+	public void saveDelete() throws FailException { PersonRoomRelate e = Builder.set("person", data.personList.get(0)).set("room", data.roomList.get(0)).set("name", "service test").to(new PersonRoomRelate());
 		service.save(e);
 		Assertions.assertEquals(true, e.getId()> 0);
 		service.delete(e);

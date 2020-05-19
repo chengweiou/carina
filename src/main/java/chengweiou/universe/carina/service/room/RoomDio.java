@@ -45,6 +45,13 @@ public class RoomDio {
         setList(Arrays.asList(result));
         return result;
     }
+    public Room findByKey(Room e) {
+        setString(e);
+        Room result = dao.findByKey(e);
+        if (result == null) return Room.NULL;
+        setList(Arrays.asList(result));
+        return result;
+    }
 
     public long count(SearchCondition searchCondition, Room sample) {
         if (sample != null) {

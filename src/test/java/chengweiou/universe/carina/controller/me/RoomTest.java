@@ -37,23 +37,16 @@ public class RoomTest {
 	public void enterRoom() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/me/room")
 				.header("loginAccount", new Gson().toJson(loginAccount))
-				.param("personIdList", "11")
+				.param("personIdList", "2")
 			).andReturn().getResponse().getContentAsString();
 		Rest<Room> saveRest = Rest.from(result, Room.class);
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
-
-		result = mvc.perform(MockMvcRequestBuilders.delete("/mg/room/" + saveRest.getData().getId())
-		).andReturn().getResponse().getContentAsString();
-		Rest<Boolean> delRest = Rest.from(result);
-		Assertions.assertEquals(BasicRestCode.OK, delRest.getCode());
-		// person 不存在，relate 表没有数据存入，不用删
-
 	}
 
 	@BeforeEach
 	public void before() {
 		mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-		loginAccount = Builder.set("person", Builder.set("id", 10L).to(new Person()))
+		loginAccount = Builder.set("person", Builder.set("id", 1L).to(new Person()))
 				.set("extra", "aaa")
 				.to(new Account());
 	}

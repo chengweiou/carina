@@ -60,6 +60,17 @@ public class HistoryTest {
 	}
 
 	@Test
+	public void updateRead() {
+		History e = Builder.set("room", data.roomList.get(0)).set("person", data.personList.get(0)).to(new History());
+		long count = service.updateReadByPersonAndRoom(e);
+		Assertions.assertEquals(1, count);
+		History indb = service.findById(data.historyList.get(0));
+		Assertions.assertEquals(false, indb.getUnread());
+
+		service.update(data.historyList.get(0));
+	}
+
+	@Test
 	public void count() {
 		long count = service.count(new SearchCondition());
 		Assertions.assertEquals(2, count);

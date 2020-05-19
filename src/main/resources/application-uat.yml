@@ -13,3 +13,6 @@ spring:
 
 site:
   andromeda: http://andromeda:8906/andromeda
+
+proj:
+  serverHistory: false

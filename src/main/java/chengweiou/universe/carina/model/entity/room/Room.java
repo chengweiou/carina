@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 public class Room implements NotNullObj, Serializable {
     private Long id;
+    private RoomType type;
     private String personIdListString;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;

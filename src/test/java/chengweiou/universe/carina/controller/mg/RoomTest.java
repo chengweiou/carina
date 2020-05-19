@@ -30,7 +30,7 @@ public class RoomTest {
 	@Test
 	public void saveDelete() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/mg/room")
-				.param("personIdList", "1,3,5")
+				.param("type", "GROUP").param("personIdList", "1,3,5")
 			).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result, Long.class);
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());

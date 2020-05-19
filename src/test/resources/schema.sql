@@ -14,6 +14,7 @@ CREATE TABLE person (
 DROP TABLE IF EXISTS room;
 CREATE TABLE room (
     id bigserial NOT NULL,
+    type text NOT NULL,
     personIdListString text NOT NULL,
     createAt timestamp without time zone NOT NULL,
     updateAt timestamp without time zone NOT NULL,
@@ -42,6 +43,7 @@ CREATE TABLE history (
     senderId bigserial NOT NULL,
     type character varying NOT NULL,
     v text NOT NULL,
+    unread boolean NOT NULL,
     updateAt timestamp without time zone NOT NULL,
     PRIMARY KEY (id)
 );

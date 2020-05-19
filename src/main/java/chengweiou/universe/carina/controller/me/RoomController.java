@@ -13,6 +13,7 @@ import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
 import chengweiou.universe.carina.model.entity.room.Room;
+import chengweiou.universe.carina.model.entity.room.RoomType;
 import chengweiou.universe.carina.service.person.PersonService;
 import chengweiou.universe.carina.service.room.PersonRoomRelateService;
 import chengweiou.universe.carina.service.room.RoomService;
@@ -28,53 +29,15 @@ import java.util.stream.Collectors;
 public class RoomController {
     @Autowired
     private RoomService service;
-    @Autowired
-    private PersonService personService;
-    @Autowired
-    private PersonRoomRelateService relateService;
 
     @GetMapping("/room")
-    public Rest<Long> enterRoom(Room e, PersonRoomRelate personRoomRelate, @RequestHeader("loginAccount") Account loginAccount)  throws ParamException, FailException, ProjException {
+    public Rest<Long> enterRoom(Room e, @RequestHeader("loginAccount") Account loginAccount)  throws ParamException, FailException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
         Valid.check("room.id | personIdList", e.getId(), e.getPersonIdList()).are().notAllNull();
-        // todo test
-        if (e.getId() != null) {
-            Valid.check("room.id ", e.getId()).is().positive();
-            Room indb = service.findById(e);
-            return Rest.ok(indb);
-        }
-
-        if (e.getPersonIdList().size() > 1) Valid.check("personRoomRelate.name", personRoomRelate.getName()).is().lengthIn(100);
         e.getPersonIdList().add(loginAccount.getPerson().getId());
-        if (e.getPersonIdList().size() == 2) {
-            List<Room> indbList = service.find(new SearchCondition(), e);
-            indbList = indbList.stream().filter(each -> each.getPersonIdList().size() == 2).collect(Collectors.toList());
-            if (indbList.size() == 1) return Rest.ok(indbList.get(0));
-            // todo 如果多于一个, 出错, 群组，然后人离开了？
-        }
-        service.save(e);
-        // todo add room type?
-        // 保存到relate表
-        List<Person> personList = e.getPersonIdList().parallelStream().map(id -> personService.findById(Builder.set("id", id).to(new Person())))
-                .filter(person -> person.notNull()).sorted().collect(Collectors.toList());
-        List<PersonRoomRelate> relateList = new ArrayList<>();
-        if (personList.size() == 2) {
-            relateList.add(Builder.set("person", personList.get(0)).set("room", e).set("name", personList.get(1).getName()).set("imgsrc", personList.get(1).getImgsrc()).to(new PersonRoomRelate()));
-            relateList.add(Builder.set("person", personList.get(1)).set("room", e).set("name", personList.get(0).getName()).set("imgsrc", personList.get(0).getImgsrc()).to(new PersonRoomRelate()));
-        } else {
-            relateList.addAll(personList.stream().map(person -> Builder.set("person", person).set("room", e).to(personRoomRelate)).collect(Collectors.toList()));
-        }
-        relateList.forEach(relate -> {
-            try {
-                relateService.save(relate);
-            } catch (FailException ex) {
-                LogUtil.e("relate list: " + relate.toString(), ex);
-                ex.printStackTrace();
-            }
-        });
-        // todo send system hello message
-        return Rest.ok(e);
+        Room indb = service.enter(e);
+        return Rest.ok(indb);
     }
 
     @DeleteMapping("/room/{id}")

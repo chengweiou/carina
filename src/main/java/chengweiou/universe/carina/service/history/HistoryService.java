@@ -13,6 +13,7 @@ public interface HistoryService {
     long delete(List<History> list);
 
     long update(History e);
+    long updateReadByPersonAndRoom(History e);
 
     History findById(History e);
 

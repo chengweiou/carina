@@ -13,8 +13,8 @@ import java.util.List;
 @Mapper
 public interface RoomDao {
 
-    @Insert("insert into room(personIdListString, createAt, updateAt) values" +
-            "(#{personIdListString}, #{createAt}, #{updateAt})")
+    @Insert("insert into room(type, personIdListString, createAt, updateAt) values" +
+            "(#{type}, #{personIdListString}, #{createAt}, #{updateAt})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     long save(Room e);
 
@@ -26,6 +26,8 @@ public interface RoomDao {
 
     @Select("select * from room where id=#{id}")
     Room findById(Room e);
+    @Select("select * from room where type=#{type} and personIdListString=#{personIdListString}")
+    Room findByKey(Room e);
 
     @SelectProvider(type = Sql.class, method = "count")
     long count(@Param("searchCondition") SearchCondition searchCondition, @Param("sample") Room sample);
@@ -37,6 +39,7 @@ public interface RoomDao {
         public String update(final Room e) {
             return new SQL() {{
                 UPDATE("room");
+                if (e.getType() != null) SET("type = #{type}");
                 if (e.getPersonIdListString() != null) SET("personIdListString = #{personIdListString}");
                 SET("updateAt = #{updateAt}");
                 WHERE("id=#{id}");
@@ -47,6 +50,7 @@ public interface RoomDao {
                 SELECT("count(*)"); FROM("room");
                 if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
                 if (sample != null) {
+                    if (sample.getType() != null) WHERE("type = (${sample.type})");
                     if (sample.getPersonIdListString() != null) WHERE("personIdListString in (${sample.personIdListString})");
                 }
             }}.toString();
@@ -57,6 +61,7 @@ public interface RoomDao {
                 SELECT("*"); FROM("room");
                 if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
                 if (sample != null) {
+                    if (sample.getType() != null) WHERE("type = (${sample.type})");
                     if (sample.getPersonIdListString() != null) WHERE("personIdListString in (${sample.personIdListString})");
                 }
 

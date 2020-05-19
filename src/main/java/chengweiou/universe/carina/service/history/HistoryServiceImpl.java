@@ -34,6 +34,12 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
+    public long updateReadByPersonAndRoom(History e) {
+        e.setUnread(false);
+        return dio.updateUnreadByRoomAndPerson(e);
+    }
+
+    @Override
     public History findById(History e) {
         return dio.findById(e);
     }

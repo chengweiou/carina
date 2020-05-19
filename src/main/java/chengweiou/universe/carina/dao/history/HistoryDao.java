@@ -13,8 +13,8 @@ import java.util.List;
 @Mapper
 public interface HistoryDao {
 
-    @Insert("insert into history(roomId, personId, senderId, type, v, updateAt) values" +
-            "(#{room.id}, #{person.id}, #{sender.id}, #{type}, #{v}, #{updateAt})")
+    @Insert("insert into history(roomId, personId, senderId, type, v, unread, updateAt) values" +
+            "(#{room.id}, #{person.id}, #{sender.id}, #{type}, #{v}, #{unread}, #{updateAt})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     long save(History e);
 
@@ -26,6 +26,8 @@ public interface HistoryDao {
 
     @UpdateProvider(type = Sql.class, method = "update")
     long update(History e);
+    @Update("update history set unread=#{unread} where roomId=#{room.id} and personId=#{person.id}")
+    long updateByRoomAndPerson(History e);
 
     @Select("select * from history where id=#{id}")
     @Results({
@@ -56,6 +58,7 @@ public interface HistoryDao {
                 if (e.getSender() != null) SET("senderId = #{sender.id}");
                 if (e.getType() != null) SET("type = #{type}");
                 if (e.getV() != null) SET("v = #{v}");
+                if (e.getUnread() != null) SET("unread = #{unread}");
                 SET("updateAt = #{updateAt}");
                 WHERE("id=#{id}");
             }}.toString();
@@ -68,6 +71,7 @@ public interface HistoryDao {
                     if (sample.getPerson() != null) WHERE("personId = #{sample.person.id}");
                     if (sample.getSender() != null) WHERE("senderId = #{sample.sender.id}");
                     if (sample.getRoom() != null) WHERE("roomId = #{sample.room.id}");
+                    if (sample.getUnread() != null) WHERE("unread = #{sample.unread}");
                 }
             }}.toString();
         }
@@ -80,6 +84,7 @@ public interface HistoryDao {
                     if (sample.getPerson() != null) WHERE("personId = #{sample.person.id}");
                     if (sample.getSender() != null) WHERE("senderId = #{sample.sender.id}");
                     if (sample.getRoom() != null) WHERE("roomId = #{sample.room.id}");
+                    if (sample.getUnread() != null) WHERE("unread = #{sample.unread}");
                 }
             }}.toString().concat(searchCondition.getOrderBy()).concat(searchCondition.getSqlLimit());
         }

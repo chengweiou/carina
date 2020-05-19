@@ -13,3 +13,6 @@ spring:
 
 site:
   andromeda: http://127.0.0.1:60002/andromeda
+
+proj:
+  serverHistory: false
