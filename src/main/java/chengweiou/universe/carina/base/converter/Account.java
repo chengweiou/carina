@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 @Data
 public class Account implements NotNullObj, Serializable {
+    private Long id;
     private Person person;
     private String username;
     @JsonIgnore

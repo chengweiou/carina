@@ -11,6 +11,12 @@ spring:
     username: postgres
     password: 123456
 
+jwt:
+  issuer: o
+  sign: andromeda
+  expMinute: 10
+  refreshExpMinute: 600
+
 site:
   andromeda: http://andromeda:8906/andromeda
 

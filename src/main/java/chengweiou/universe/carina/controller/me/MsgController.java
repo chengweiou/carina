@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController("meMsgController")
 @RequestMapping("me")
@@ -35,12 +34,22 @@ public class MsgController {
     }
 
     @GetMapping("/msg")
-    public Rest<List<History>> find(SearchCondition searchCondition, History sample, @RequestHeader("loginAccount") Account loginAccount) throws ParamException, ExecutionException, InterruptedException {
+    public Rest<List<History>> find(SearchCondition searchCondition, History sample, @RequestHeader("loginAccount") Account loginAccount) throws ParamException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
         Valid.check("history.room", sample.getRoom()).isNotNull();
         Valid.check("history.room.id", sample.getRoom().getId()).is().positive();
         List<History> list = service.read(searchCondition, loginAccount.getPerson(), sample.getRoom());
         return Rest.ok(list);
+    }
+
+    @PostMapping("/msg/{id}/read")
+    public Rest<Long> readById(History e, @RequestHeader("loginAccount") Account loginAccount) throws ParamException, FailException {
+        Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
+        Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
+        Valid.check("history.id", e.getId()).isNotNull();
+        e.setPerson(loginAccount.getPerson());
+        service.readById(e);
+        return Rest.ok(null);
     }
 }

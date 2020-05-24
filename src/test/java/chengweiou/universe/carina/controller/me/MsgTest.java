@@ -11,7 +11,6 @@ import chengweiou.universe.carina.model.ProjectRestCode;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.model.entity.person.Person;
-import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
 import chengweiou.universe.carina.model.entity.room.Room;
 import chengweiou.universe.carina.service.history.HistoryDio;
 import chengweiou.universe.carina.service.person.PersonDio;
@@ -48,30 +47,31 @@ public class MsgTest {
 	@Autowired
 	private ProjConfig config;
 	@Test
-	public void send() throws Exception {
+	public void sendAndRead() throws Exception {
 		config.setServerHistory(false);
 
 		String result = mvc.perform(MockMvcRequestBuilders.post("/me/msg")
 				.header("loginAccount", new Gson().toJson(loginAccount))
-				.param("room.id", "1").param("v", "ctrl save")
+				.param("room.id", "2").param("v", "ctrl save")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result, Long.class);
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
 
 		result = mvc.perform(MockMvcRequestBuilders.get("/me/msg")
 				.header("loginAccount", new Gson().toJson(loginAccount))
-				.param("room.id", "1").param("v", "ctrl save")
+				.param("room.id", "2").param("v", "ctrl save")
 		).andReturn().getResponse().getContentAsString();
 		Rest<List> findRest = Rest.from(result, List.class);
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
-		Assertions.assertEquals(1, findRest.getData().size());
+		Assertions.assertEquals(0, findRest.getData().size());
 
 		List<History> deleteList = historyDio.find(new SearchCondition(), Builder.set("room", Builder.set("id", 2).to(new Room())).to(new History()));
 		historyDio.delete(deleteList);
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));
-		personRoomRelateDio.update(data.personRoomRelateList.get(0));
-		personRoomRelateDio.update(data.personRoomRelateList.get(1));
+		personRoomRelateDio.update(data.personRoomRelateList.get(2));
+		personRoomRelateDio.update(data.personRoomRelateList.get(3));
+		personRoomRelateDio.update(data.personRoomRelateList.get(4));
 	}
 
 	@Test
@@ -82,6 +82,23 @@ public class MsgTest {
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> rest = Rest.from(result, ProjectRestCode.class);
 		Assertions.assertEquals(ProjectRestCode.NOT_EXISTS, rest.getCode());
+	}
+
+	@Test
+	public void readById() throws Exception {
+		String result = mvc.perform(MockMvcRequestBuilders.post("/me/msg/" + data.historyList.get(0).getId() + "/read")
+				.header("loginAccount", new Gson().toJson(loginAccount))
+		).andReturn().getResponse().getContentAsString();
+		Rest<Long> rest = Rest.from(result);
+	}
+
+	@Test
+	public void readByIdFailNotInRoom() throws Exception {
+		String result = mvc.perform(MockMvcRequestBuilders.post("/me/msg/10/read")
+				.header("loginAccount", new Gson().toJson(loginAccount))
+		).andReturn().getResponse().getContentAsString();
+		Rest<Long> rest = Rest.from(result);
+		Assertions.assertEquals(BasicRestCode.FAIL, rest.getCode());
 	}
 
 	@BeforeEach

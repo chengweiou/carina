@@ -33,10 +33,13 @@ dependencies {
 	implementation 'chengweiou.universe:blackhole:0.0.29@jar'
 	implementation 'com.google.code.gson:gson:2.8.5'
 	implementation 'org.apache.commons:commons-lang3:3.10'
+	implementation 'com.auth0:java-jwt:3.10.1'
+	implementation 'eu.bitwalker:UserAgentUtils:1.21'
 	
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-undertow'
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'

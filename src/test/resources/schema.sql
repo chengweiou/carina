@@ -1,4 +1,4 @@
-set search_path = andromeda;
+set search_path = carina;
 
 DROP TABLE IF EXISTS person;
 CREATE TABLE person (

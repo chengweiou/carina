@@ -21,6 +21,8 @@ public class History implements NotNullObj, Serializable {
     private Boolean unread;
     private LocalDateTime updateAt;
 
+    private String extra; // not indb 用于原样返回给前端
+
     public void fillNotRequire() {
         type = type != null ? type : HistoryType.TEXT;
         unread = unread != null ? unread : true;
