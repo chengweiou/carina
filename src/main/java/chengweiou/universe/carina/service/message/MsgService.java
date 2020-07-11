@@ -44,11 +44,4 @@ public interface MsgService {
      */
     void readById(History e) throws FailException;
 
-    /**
-     *  存服务器: 清除 列表数字，减少 外面数字, 更新消息 !unread
-     * !存服务器: 清除 列表数字，减少 外面数字，删除消息 !unread
-     * @param person
-     * @param room
-     */
-    void leaveRoom(Person person, Room room);
 }

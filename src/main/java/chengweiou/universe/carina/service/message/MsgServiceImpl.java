@@ -146,20 +146,4 @@ public class MsgServiceImpl implements MsgService {
         personTask.update(person);
         return result;
     }
-
-    @Override
-    public void leaveRoom(Person person, Room room) {
-        if (config.getServerHistory()) {
-            historyDio.updateUnreadByRoomAndPerson(Builder.set("person", person).set("room", room).set("unread", false).to(new History()));
-        } else {
-            List<History> list = historyDio.find(Builder.set("limit", 0).to(new SearchCondition()), Builder.set("person", person).set("room", room).to(new History()));
-            historyDio.delete(list);
-        }
-        PersonRoomRelate relate = personRoomRelateDio.findByKey(Builder.set("person", person).set("room", room).to(new PersonRoomRelate()));
-        relate.setUnread(0);
-        personRoomRelateTask.update(relate);
-        long personUnread = historyDio.count(new SearchCondition(), Builder.set("person", person).set("unread", true).to(new History()));
-        person.setUnread(Math.toIntExact(personUnread));
-        personTask.update(person);
-    }
 }

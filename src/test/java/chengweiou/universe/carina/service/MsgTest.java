@@ -13,6 +13,7 @@ import chengweiou.universe.carina.service.history.HistoryDio;
 import chengweiou.universe.carina.service.message.MsgService;
 import chengweiou.universe.carina.service.person.PersonDio;
 import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
+import chengweiou.universe.carina.service.room.RoomService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,8 @@ import java.util.List;
 public class MsgTest {
 	@Autowired
 	private MsgService service;
+	@Autowired
+	private RoomService roomService;
 	@Autowired
 	private HistoryDio historyDio;
 	@Autowired
@@ -202,7 +205,7 @@ public class MsgTest {
 		History history = Builder.set("sender", data.personList.get(0)).set("room", data.roomList.get(1)).set("v", "service test").to(new History());
 		List<History> historyList = service.send(history);
 
-		service.leaveRoom(data.personList.get(1), data.roomList.get(1));
+		roomService.leaveRoom(data.personList.get(1), data.roomList.get(1));
 		Person p1 = personDio.findById(data.personList.get(1));
 		Assertions.assertEquals(1, p1.getUnread());
 		PersonRoomRelate indb = personRoomRelateDio.findByKey(Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new PersonRoomRelate()));
@@ -226,14 +229,14 @@ public class MsgTest {
 		History history = Builder.set("sender", data.personList.get(0)).set("room", data.roomList.get(1)).set("v", "service test").to(new History());
 		List<History> historyList = service.send(history);
 
-		service.leaveRoom(data.personList.get(1), data.roomList.get(1));
+		roomService.leaveRoom(data.personList.get(1), data.roomList.get(1));
 		Person p1 = personDio.findById(data.personList.get(1));
 		Assertions.assertEquals(1, p1.getUnread());
 		PersonRoomRelate indb = personRoomRelateDio.findByKey(Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new PersonRoomRelate()));
 		Assertions.assertEquals(0, indb.getUnread());
 		List<History> indbHistoryList = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(0, indbHistoryList.size());
-		service.leaveRoom(data.personList.get(2), data.roomList.get(1));
+		roomService.leaveRoom(data.personList.get(2), data.roomList.get(1));
 
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));

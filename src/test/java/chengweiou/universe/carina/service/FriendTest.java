@@ -26,7 +26,7 @@ public class FriendTest {
 
 	@Test
 	public void saveDelete() throws FailException {
-		Friend e = Builder.set("person", data.personList.get(1)).set("target", data.personList.get(0)).to(new Friend());
+		Friend e = Builder.set("person", data.personList.get(1)).set("target", data.personList.get(2)).to(new Friend());
 		service.save(e);
 		Assertions.assertEquals(true, e.getId()> 0);
 		service.delete(e);
@@ -45,6 +45,22 @@ public class FriendTest {
 	}
 
 	@Test
+	public void saveOrUpdate() throws FailException {
+		Friend e = Builder.set("person", data.personList.get(1)).set("target", data.personList.get(0)).to(new Friend());
+		service.saveOrUpdate(e);
+		Assertions.assertEquals(true, e.getId()> 0);
+		service.delete(e);
+	}
+
+	@Test
+	public void countByKey() {
+		long count = service.countByKey(data.friendList.get(0));
+		Assertions.assertEquals(1, count);
+		count = service.countByKey(Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend()));
+		Assertions.assertEquals(0, count);
+	}
+
+	@Test
 	public void count() {
 		long count = service.count(new SearchCondition());
 		Assertions.assertEquals(2, count);
@@ -55,6 +71,8 @@ public class FriendTest {
 		List<Friend> list = service.find(new SearchCondition());
 		Assertions.assertEquals(2, list.size());
 	}
+
+
 
 	@BeforeEach
 	public void init() {

@@ -1,8 +1,7 @@
 package chengweiou.universe.carina.websocket;
 
-import chengweiou.universe.blackhole.model.Builder;
+import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.base.jwt.JwtUtil;
-import chengweiou.universe.carina.model.entity.person.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
@@ -23,9 +22,8 @@ public class WsHandshakeInterceptor implements HandshakeInterceptor {
         String path = request.getURI().getPath();
         String token = path.substring(path.lastIndexOf("/") + 1);
         attributes.put("token", token);
-//        Account account = jwtUtil.verify(token);
-//        attributes.put("user", account.getPerson());
-        attributes.put("user", Builder.set("id", 1).to(new Person()));
+        Account account = jwtUtil.verify(token);
+        attributes.put("user", account.getPerson());
         return true;
     }
 

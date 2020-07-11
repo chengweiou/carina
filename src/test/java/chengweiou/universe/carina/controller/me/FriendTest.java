@@ -50,31 +50,26 @@ public class FriendTest {
 	@Test
 	public void saveDeleteFail() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/me/friend")
+				.header("loginAccount", new Gson().toJson(loginAccount))
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.PARAM, saveRest.getCode());
 	}
 
 	@Test
-	public void update() throws Exception {
-		String old = data.friendList.get(0).getTarget().getId().toString();
-
-		String result = mvc.perform(MockMvcRequestBuilders.put("/me/friend/" + data.friendList.get(0).getId())
+	public void check() throws Exception {
+		String result = mvc.perform(MockMvcRequestBuilders.get("/me/friend/check")
 				.header("loginAccount", new Gson().toJson(loginAccount))
 				.param("target.id", "30")
 		).andReturn().getResponse().getContentAsString();
-		Rest<Boolean> rest = Rest.from(result);
-		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());
-		Assertions.assertEquals(true, rest.getData());
-
-		mvc.perform(MockMvcRequestBuilders.put("/me/friend/" + data.friendList.get(0).getId())
-				.param("target.id", old)
-		).andReturn().getResponse().getContentAsString();
+		Rest<Long> saveRest = Rest.from(result);
+		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
+		Assertions.assertEquals(false, saveRest.getData());
 	}
 
 	@Test
 	public void updateFail() throws Exception {
-		String result = mvc.perform(MockMvcRequestBuilders.put("/me/friend/" + data.friendList.get(0).getId())
+		String result = mvc.perform(MockMvcRequestBuilders.post("/me/friend")
 				.header("loginAccount", new Gson().toJson(loginAccount))
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> rest = Rest.from(result);

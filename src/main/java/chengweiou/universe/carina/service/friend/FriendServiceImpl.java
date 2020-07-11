@@ -29,8 +29,23 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
+    public void saveOrUpdate(Friend e) throws FailException {
+        Friend indb = dio.findByKey(e);
+        if (!indb.notNull()) {
+            dio.save(e);
+        } else {
+            e.setId(indb.getId());
+            dio.update(e);
+        }
+    }
+
+    @Override
     public Friend findById(Friend e) {
         return dio.findById(e);
+    }
+    @Override
+    public long countByKey(Friend e) {
+        return dio.countByKey(e);
     }
 
     @Override

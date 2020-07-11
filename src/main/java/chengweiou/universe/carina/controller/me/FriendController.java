@@ -28,7 +28,7 @@ public class FriendController {
         Valid.check("friend.target", e.getTarget()).isNotNull();
         Valid.check("friend.target.id", e.getTarget().getId()).is().positive();
         e.setPerson(loginAccount.getPerson());
-        service.save(e);
+        service.saveOrUpdate(e);
         return Rest.ok(e.getId());
     }
 
@@ -40,15 +40,6 @@ public class FriendController {
         service.delete(e);
         return Rest.ok(true);
     }
-    @PutMapping("/friend/{id}")
-    public Rest<Boolean> update(Friend e, @RequestHeader("loginAccount") Account loginAccount) throws ParamException {
-        Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
-        Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
-        Valid.check("friend.id", e.getId()).is().positive();
-        Valid.check("friend.person | target", e.getPerson(), e.getTarget()).are().notAllNull();
-        boolean success = service.update(e) == 1;
-        return Rest.ok(success);
-    }
 
     @GetMapping("/friend/{id}")
     public Rest<Friend> findById(Friend e, @RequestHeader("loginAccount") Account loginAccount) throws ParamException {
@@ -57,6 +48,16 @@ public class FriendController {
         Valid.check("friend.id", e.getId()).is().positive();
         Friend indb = service.findById(e);
         return Rest.ok(indb);
+    }
+    @GetMapping("/friend/check")
+    public Rest<Friend> check(Friend e, @RequestHeader("loginAccount") Account loginAccount) throws ParamException {
+        Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
+        Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
+        Valid.check("friend.target", e.getTarget()).isNotNull();
+        Valid.check("friend.target.id", e.getTarget().getId()).is().positive();
+        e.setPerson(loginAccount.getPerson());
+        long count = service.countByKey(e);
+        return Rest.ok(count == 1);
     }
 
     @GetMapping("/friend/count")

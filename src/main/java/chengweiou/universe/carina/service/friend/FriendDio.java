@@ -2,9 +2,9 @@ package chengweiou.universe.carina.service.friend;
 
 
 import chengweiou.universe.blackhole.exception.FailException;
+import chengweiou.universe.carina.dao.friend.FriendDao;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.friend.Friend;
-import chengweiou.universe.carina.dao.friend.FriendDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +17,11 @@ public class FriendDio {
     private FriendDao dao;
 
     public void save(Friend e) throws FailException {
+        long count = dao.countByKey(e);
+        if (count == 1) throw new FailException();
         e.fillNotRequire();
         e.updateAt();
-        long count = dao.save(e);
+        count = dao.save(e);
         if (count != 1) throw new FailException();
     }
 
@@ -38,6 +40,15 @@ public class FriendDio {
         return result!=null ? result : Friend.NULL;
     }
 
+    public long countByKey(Friend e) {
+        return dao.countByKey(e);
+    }
+
+    public Friend findByKey(Friend e) {
+        Friend result = dao.findByKey(e);
+        return result!=null ? result : Friend.NULL;
+    }
+
     public long count(SearchCondition searchCondition, Friend sample) {
         return dao.count(searchCondition, sample);
     }
@@ -46,4 +57,6 @@ public class FriendDio {
         searchCondition.setDefaultSort("updateAt");
         return dao.find(searchCondition, sample);
     }
+
+
 }

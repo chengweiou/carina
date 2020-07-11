@@ -13,12 +13,16 @@ public interface FriendService {
 
     long update(Friend e);
 
+    void saveOrUpdate(Friend e) throws FailException;
+
     Friend findById(Friend e);
+    long countByKey(Friend e);
 
     long count(SearchCondition searchCondition);
     List<Friend> find(SearchCondition searchCondition);
 
     long count(SearchCondition searchCondition, Friend sample);
     List<Friend> find(SearchCondition searchCondition, Friend sample);
+
 
 }

@@ -25,11 +25,12 @@ public class JwtUtil {
     private JwtConfig config;
     public String sign(Account account) {
         try {
-            Date expiresAt = Date.from(LocalDateTime.now(ZoneId.of("UTC")).plus(config.getExpMinute(), ChronoUnit.MINUTES).atZone(ZoneId.of("UTC")).toInstant());
+            Date expiresAt = Date.from(LocalDateTime.now(ZoneId.of("UTC")).plus(config.getExpMinute(), ChronoUnit.DAYS).atZone(ZoneId.of("UTC")).toInstant());
             return JWT.create()
                     .withIssuer(config.getIssuer())
                     .withClaim("accountId", account.getId())
-                    .withClaim("personId", account.getPerson().getId())
+                    // andromeda 中是string
+                    .withClaim("personId", account.getPerson().getId().toString())
                     .withClaim("extra", account.getExtra())
                     .withExpiresAt(expiresAt)
                     .sign(Algorithm.HMAC512(config.getSign()));

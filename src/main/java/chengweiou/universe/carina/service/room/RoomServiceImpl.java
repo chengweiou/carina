@@ -2,18 +2,19 @@ package chengweiou.universe.carina.service.room;
 
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.blackhole.model.Builder;
-import chengweiou.universe.blackhole.util.LogUtil;
+import chengweiou.universe.carina.config.ProjConfig;
 import chengweiou.universe.carina.model.SearchCondition;
+import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
 import chengweiou.universe.carina.model.entity.room.Room;
 import chengweiou.universe.carina.model.entity.room.RoomType;
+import chengweiou.universe.carina.service.history.HistoryDio;
 import chengweiou.universe.carina.service.person.PersonDio;
+import chengweiou.universe.carina.service.person.PersonTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,14 @@ public class RoomServiceImpl implements RoomService {
     private PersonDio personDio;
     @Autowired
     private PersonRoomRelateDio personRoomRelateDio;
+    @Autowired
+    private HistoryDio historyDio;
+    @Autowired
+    private PersonTask personTask;
+    @Autowired
+    private PersonRoomRelateTask personRoomRelateTask;
+    @Autowired
+    private ProjConfig config;
 
     @Override
     public void save(Room e) throws FailException {
@@ -99,5 +108,21 @@ public class RoomServiceImpl implements RoomService {
             personRoomRelateDio.save(relate);
         }
         return e;
+    }
+
+    @Override
+    public void leaveRoom(Person person, Room room) {
+        if (config.getServerHistory()) {
+            historyDio.updateUnreadByRoomAndPerson(Builder.set("person", person).set("room", room).set("unread", false).to(new History()));
+        } else {
+            List<History> list = historyDio.find(Builder.set("limit", 0).to(new SearchCondition()), Builder.set("person", person).set("room", room).to(new History()));
+            historyDio.delete(list);
+        }
+        PersonRoomRelate relate = personRoomRelateDio.findByKey(Builder.set("person", person).set("room", room).to(new PersonRoomRelate()));
+        relate.setUnread(0);
+        personRoomRelateTask.update(relate);
+        long personUnread = historyDio.count(new SearchCondition(), Builder.set("person", person).set("unread", true).to(new History()));
+        person.setUnread(Math.toIntExact(personUnread));
+        personTask.update(person);
     }
 }

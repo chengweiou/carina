@@ -30,6 +30,10 @@ public interface FriendDao {
             @Result(property = "target.id", column = "targetId"),
     })
     Friend findById(Friend e);
+    @Select("select count(*) from friend where personId=#{person.id} and targetId=#{target.id}")
+    long countByKey(Friend e);
+    @Select("select * from friend where personId=#{person.id} and targetId=#{target.id}")
+    Friend findByKey(Friend e);
 
     @SelectProvider(type = Sql.class, method = "count")
     long count(@Param("searchCondition") SearchCondition searchCondition, @Param("sample") Friend sample);
@@ -40,6 +44,8 @@ public interface FriendDao {
             @Result(property = "target.id", column = "targetId"),
     })
     List<Friend> find(@Param("searchCondition") SearchCondition searchCondition, @Param("sample") Friend sample);
+
+
 
     class Sql {
 
