@@ -8,5 +8,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 public class SearchCondition extends AbstractSearchCondition {
-
+    private Long maxId;
 }

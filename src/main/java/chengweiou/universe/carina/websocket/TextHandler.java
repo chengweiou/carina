@@ -47,7 +47,6 @@ public class TextHandler extends TextWebSocketHandler {
             }
 
         }
-        System.out.println("afterConnectionEstablished");
         super.afterConnectionEstablished(session);
     }
 
@@ -97,7 +96,6 @@ public class TextHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("afterConnectionClosed");
         Person person = (Person) session.getAttributes().get("user");
         switch (getDeviceType(session)) {
             case COMPUTER: PC_SESSION_MAP.remove(person.getId(), session); break;
@@ -108,7 +106,6 @@ public class TextHandler extends TextWebSocketHandler {
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        System.out.println("handleMessage");
         super.handleMessage(session, message);
     }
 

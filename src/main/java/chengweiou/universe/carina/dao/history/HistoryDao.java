@@ -67,6 +67,7 @@ public interface HistoryDao {
             return new SQL() {{
                 SELECT("count(*)"); FROM("history");
                 if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
+                if (searchCondition.getMaxId() != null) WHERE("id < #{searchCondition.maxId}");
                 if (sample != null) {
                     if (sample.getPerson() != null) WHERE("personId = #{sample.person.id}");
                     if (sample.getSender() != null) WHERE("senderId = #{sample.sender.id}");
@@ -80,6 +81,7 @@ public interface HistoryDao {
             return new SQL() {{
                 SELECT("*"); FROM("history");
                 if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
+                if (searchCondition.getMaxId() != null) WHERE("id < #{searchCondition.maxId}");
                 if (sample != null) {
                     if (sample.getPerson() != null) WHERE("personId = #{sample.person.id}");
                     if (sample.getSender() != null) WHERE("senderId = #{sample.sender.id}");
