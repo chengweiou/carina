@@ -29,8 +29,8 @@ public class MsgController {
         Valid.check("history.room.id", e.getRoom().getId()).is().positive();
         Valid.check("history.v", e.getV()).is().lengthIn(100);
         e.setSender(loginAccount.getPerson());
-        service.send(e);
-        return Rest.ok(e.getId());
+        List<History> list = service.send(e);
+        return Rest.ok(list.get(0).getId());
     }
 
     @GetMapping("/msg")
