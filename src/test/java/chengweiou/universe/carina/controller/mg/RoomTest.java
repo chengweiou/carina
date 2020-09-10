@@ -30,12 +30,14 @@ public class RoomTest {
 	@Test
 	public void saveDelete() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/mg/room")
+				.header("inServer", "true")
 				.param("type", "GROUP").param("personIdList", "1,3,5")
 			).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result, Long.class);
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
 
 		result = mvc.perform(MockMvcRequestBuilders.delete("/mg/room/" + saveRest.getData())
+				.header("inServer", "true")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> delRest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.OK, delRest.getCode());
@@ -44,6 +46,7 @@ public class RoomTest {
 	@Test
 	public void saveDeleteFail() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/mg/room")
+				.header("inServer", "true")
 				.param("name", "controler test")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result);
@@ -55,6 +58,7 @@ public class RoomTest {
 		String old = data.roomList.get(0).getPersonIdList().stream().map(String::valueOf).collect(Collectors.joining(","));
 
 		String result = mvc.perform(MockMvcRequestBuilders.put("/mg/room/" + data.roomList.get(0).getId())
+				.header("inServer", "true")
 				.param("personIdList", "1,3,5")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> rest = Rest.from(result);
@@ -62,6 +66,7 @@ public class RoomTest {
 		Assertions.assertEquals(true, rest.getData());
 
 		mvc.perform(MockMvcRequestBuilders.put("/mg/room/" + data.roomList.get(0).getId())
+				.header("inServer", "true")
 				.param("personIdList", old)
 		).andReturn().getResponse().getContentAsString();
 	}
@@ -69,6 +74,7 @@ public class RoomTest {
 	@Test
 	public void updateFail() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.put("/mg/room/" + data.roomList.get(0).getId())
+				.header("inServer", "true")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> rest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.PARAM, rest.getCode());
@@ -77,6 +83,7 @@ public class RoomTest {
 	@Test
 	public void count() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/mg/room/count")
+				.header("inServer", "true")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> rest = Rest.from(result, Long.class);
 		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());
@@ -86,6 +93,7 @@ public class RoomTest {
 	@Test
 	public void find() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/mg/room")
+				.header("inServer", "true")
 		).andReturn().getResponse().getContentAsString();
 		Rest<List<Account>> rest = Rest.from(result, List.class);
 		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());

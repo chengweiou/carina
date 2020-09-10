@@ -29,6 +29,7 @@ public class HistoryTest {
 	@Test
 	public void saveDelete() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/mg/history")
+				.header("inServer", "true")
 				.param("person.id", data.personList.get(0).getId().toString())
 				.param("room.id", data.roomList.get(0).getId().toString()).param("sender.id", "1").param("v", "ctrl save")
 			).andReturn().getResponse().getContentAsString();
@@ -36,6 +37,7 @@ public class HistoryTest {
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
 
 		result = mvc.perform(MockMvcRequestBuilders.delete("/mg/history/" + saveRest.getData())
+				.header("inServer", "true")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> delRest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.OK, delRest.getCode());
@@ -44,6 +46,7 @@ public class HistoryTest {
 	@Test
 	public void saveDeleteFail() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/mg/history")
+				.header("inServer", "true")
 				.param("v", "controler test")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result);
@@ -55,6 +58,7 @@ public class HistoryTest {
 		String old = data.historyList.get(0).getV();
 
 		String result = mvc.perform(MockMvcRequestBuilders.put("/mg/history/" + data.historyList.get(0).getId())
+				.header("inServer", "true")
 				.param("v", "control update")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> rest = Rest.from(result);
@@ -62,6 +66,7 @@ public class HistoryTest {
 		Assertions.assertEquals(true, rest.getData());
 
 		mvc.perform(MockMvcRequestBuilders.put("/mg/history/" + data.historyList.get(0).getId())
+				.header("inServer", "true")
 				.param("v", old)
 		).andReturn().getResponse().getContentAsString();
 	}
@@ -69,6 +74,7 @@ public class HistoryTest {
 	@Test
 	public void updateFail() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.put("/mg/history/" + data.historyList.get(0).getId())
+				.header("inServer", "true")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> rest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.PARAM, rest.getCode());
@@ -77,6 +83,7 @@ public class HistoryTest {
 	@Test
 	public void count() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/mg/history/count")
+				.header("inServer", "true")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> rest = Rest.from(result, Long.class);
 		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());
@@ -86,6 +93,7 @@ public class HistoryTest {
 	@Test
 	public void find() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/mg/history")
+				.header("inServer", "true")
 		).andReturn().getResponse().getContentAsString();
 		Rest<List<Account>> rest = Rest.from(result, List.class);
 		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());
