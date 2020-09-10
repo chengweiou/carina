@@ -46,10 +46,13 @@ public class FriendTest {
 
 	@Test
 	public void saveOrUpdate() throws FailException {
-		Friend e = Builder.set("person", data.personList.get(1)).set("target", data.personList.get(0)).to(new Friend());
-		service.saveOrUpdate(e);
-		Assertions.assertEquals(true, e.getId()> 0);
-		service.delete(e);
+		Friend e1 = Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend());
+		service.saveOrUpdate(e1);
+		Friend e2 = Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend());
+		service.saveOrUpdate(e2);
+		Assertions.assertEquals(true, e1.getId()> 0);
+		Assertions.assertEquals(e2.getId(), e1.getId());
+		service.delete(e2);
 	}
 
 	@Test

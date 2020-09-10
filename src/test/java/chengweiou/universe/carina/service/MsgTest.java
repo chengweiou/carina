@@ -197,7 +197,7 @@ public class MsgTest {
 	}
 
 	@Test
-	public void clearByRoomServerHistory() throws FailException, ProjException {
+	public void clearByRoomServerHistory() throws FailException, ProjException, InterruptedException {
 		// todo 现在要看这条记录是什么时候进来的
 		List<History> indbHistoryList1 = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(0, indbHistoryList1.size());
@@ -206,6 +206,7 @@ public class MsgTest {
 		List<History> historyList = service.send(history);
 
 		roomService.leaveRoom(data.personList.get(1), data.roomList.get(1));
+		Thread.sleep(10);
 		Person p1 = personDio.findById(data.personList.get(1));
 		Assertions.assertEquals(1, p1.getUnread());
 		PersonRoomRelate indb = personRoomRelateDio.findByKey(Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new PersonRoomRelate()));
@@ -224,12 +225,13 @@ public class MsgTest {
 	}
 
 	@Test
-	public void clearByRoomNoServerHistory() throws FailException, ProjException {
+	public void clearByRoomNoServerHistory() throws FailException, ProjException, InterruptedException {
 		config.setServerHistory(false);
 		History history = Builder.set("sender", data.personList.get(0)).set("room", data.roomList.get(1)).set("v", "service test").to(new History());
 		List<History> historyList = service.send(history);
 
 		roomService.leaveRoom(data.personList.get(1), data.roomList.get(1));
+		Thread.sleep(10);
 		Person p1 = personDio.findById(data.personList.get(1));
 		Assertions.assertEquals(1, p1.getUnread());
 		PersonRoomRelate indb = personRoomRelateDio.findByKey(Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new PersonRoomRelate()));
@@ -237,6 +239,7 @@ public class MsgTest {
 		List<History> indbHistoryList = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(0, indbHistoryList.size());
 		roomService.leaveRoom(data.personList.get(2), data.roomList.get(1));
+		Thread.sleep(10);
 
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));
