@@ -1,13 +1,21 @@
 package chengweiou.universe.carina.dao.room;
 
 
-import chengweiou.universe.carina.model.SearchCondition;
-import chengweiou.universe.carina.model.entity.room.Room;
-import org.apache.ibatis.annotations.*;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.jdbc.SQL;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import chengweiou.universe.carina.model.SearchCondition;
+import chengweiou.universe.carina.model.entity.room.Room;
 
 @Repository
 @Mapper
@@ -45,27 +53,25 @@ public interface RoomDao {
                 WHERE("id=#{id}");
             }}.toString();
         }
+
         public String count(@Param("searchCondition")final SearchCondition searchCondition, @Param("sample")final Room sample) {
-            return new SQL() {{
-                SELECT("count(*)"); FROM("room");
-                if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
-                if (sample != null) {
-                    if (sample.getType() != null) WHERE("type = (${sample.type})");
-                    if (sample.getPersonIdListString() != null) WHERE("personIdListString in (${sample.personIdListString})");
-                }
-            }}.toString();
+            return baseFind(searchCondition, sample).SELECT("count(*)").toString();
         }
 
         public String find(@Param("searchCondition")final SearchCondition searchCondition, @Param("sample")final Room sample) {
+            return baseFind(searchCondition, sample).SELECT("*").toString().concat(searchCondition.getOrderBy()).concat(searchCondition.getSqlLimit());
+        }
+
+        private SQL baseFind(SearchCondition searchCondition, Room sample) {
             return new SQL() {{
-                SELECT("*"); FROM("room");
+                FROM("room");
                 if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
                 if (sample != null) {
                     if (sample.getType() != null) WHERE("type = (${sample.type})");
                     if (sample.getPersonIdListString() != null) WHERE("personIdListString in (${sample.personIdListString})");
                 }
-
-            }}.toString().concat(searchCondition.getOrderBy()).concat(searchCondition.getSqlLimit());
+            }};
         }
+
     }
 }

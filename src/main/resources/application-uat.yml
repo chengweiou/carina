@@ -1,11 +1,7 @@
 server:
   port: 8906
-  servlet:
-    context-path: /carina
 
 spring:
-  jackson:
-    default-property-inclusion: NON_NULL
   datasource:
     url: jdbc:postgresql://pgsql/universe?currentSchema=carina
     username: postgres
@@ -13,9 +9,13 @@ spring:
 
 jwt:
   issuer: o
+  # use sign or the rsa path
   sign: andromeda
+  # use this or the rsa path
+  rsaPrivatePath: src/main/resources/jwt-private.pem
+  rsaPublicPath: src/main/resources/jwt-public.pem
   expMinute: 10
-  refreshExpMinute: 600
+  refreshExpMinute: 60
 
 site:
   andromeda: http://andromeda:8906/andromeda

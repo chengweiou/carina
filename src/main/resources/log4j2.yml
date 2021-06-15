@@ -1,0 +1,81 @@
+configuration:
+# 在运行时，可以动态修改配置文件，不用重启服务，在固定时长更新一次配置文件。monitorInterval设置更新配置文件时长， 单位为seconds ， min senconds >= 5secondes 
+  status: off
+  monitorInterval: 1800
+  appenders:
+    console:
+      name: console
+      target: SYSTEM_OUT
+      patternLayout: 
+        pattern: "%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{${sys:PID}}{magenta} [%15.15t] %style{%-40.40C{1.}}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+    file:
+      name: out
+      fileName: logs/out.log
+      append: false
+      patternLayout:
+        charset: UTF-8
+        pattern: "%d{HH:mm:ss:SSS} %-5level %class{36} %L %M - %msg%xEx%n"
+#         注意：一般情况下都使用RollingRandomAccessFile 。
+#         RollingRandomAccessFile可以按照日志名称的格式进行定期备份，拥有一定的备份策略。
+#         1.是否压缩备份日志：直接在filePattern属性的文件名称最后加对应的压缩后缀，如gzip压缩用 .gz
+    rollingRandomAccessFile:
+      - name: info
+        fileName: logs/info.log
+        filePattern: logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log
+        thresholdFilter:
+          level: info
+          onMatch: ACCEPT
+          onMismatch: DENY
+        patternLayout:
+          charset: UTF-8
+          pattern: "[%d{HH:mm:ss:SSS}] [%p] - %logger%n     --- %l %m%n"
+        # 备份策略:满足其中一个就可以启动备份
+        policies:
+        # interval 多久执行一次备份，单位为 RollingRandomAccessFile的属性filePattern中%d{yyyy-MM-dd}的最小时间单位，此处是天
+          timeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+          sizeBasedTriggeringPolicy:
+            size: 250 MB
+      - name: error
+        fileName: logs/error.log
+        filePattern: logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log
+        thresholdFilter:
+          level: error
+          onMatch: ACCEPT
+          onMismatch: DENY
+        patternLayout:
+          charset: UTF-8
+          pattern: "[%d{HH:mm:ss:SSS}] [%p] - %logger%n     --- %l %m%n"
+        # 备份策略:满足其中一个就可以启动备份
+        policies:
+        # interval 多久执行一次备份，单位为 RollingRandomAccessFile的属性filePattern中%d{yyyy-MM-dd}的最小时间单位，此处是天
+          timeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+          sizeBasedTriggeringPolicy:
+            size: 250 MB
+    # 异步 appder  ,使用的是ArrayBlocingQueue 
+    async:
+      name: Async
+      appenderRef:
+        - ref: info
+        - ref: error
+
+  loggers:
+    logger:
+      - name: org.springframework
+        level: debug
+      - name: org.apache
+        level: debug
+      - name: org.mybatis
+        level: debug
+      - name: org.mysql
+        level: debug
+    root:
+      level: debug
+      appenderRef:
+        - ref: console
+        - ref: out
+        - ref: info
+        - ref: error

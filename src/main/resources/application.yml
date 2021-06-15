@@ -1,3 +1,17 @@
 spring:
   profiles:
     active: dev
+  jackson:
+    default-property-inclusion: NON_NULL
+
+server:
+  servlet:
+    context-path: /carina
+  error:
+    whitelabel:
+      enabled: false
+
+logging:
+  level:
+    org:
+      springframework: INFO
