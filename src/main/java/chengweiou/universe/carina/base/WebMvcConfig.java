@@ -30,7 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new AuthInterceptorMe()).addPathPatterns("/me/**");
         registry.addInterceptor(new AuthInterceptorMg()).addPathPatterns("/mg/**");
     }
-    //    todo tip if use wormhole, cors in this project must trun off
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*");
