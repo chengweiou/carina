@@ -9,6 +9,7 @@ import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.util.LogUtil;
 import org.springframework.context.annotation.Profile;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,6 +33,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingRequestHeaderException.class)
     public Rest handleParamException(MissingRequestHeaderException ex) {
         return Rest.fail(BasicRestCode.PARAM);
+    }
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Rest handleException(HttpRequestMethodNotSupportedException ex) {
+        Rest rest = Rest.fail(BasicRestCode.FAIL);
+        LogUtil.i(ex.getMessage());
+        return rest;
     }
     @ExceptionHandler(FailException.class)
     public Rest handleFailException(FailException ex) {

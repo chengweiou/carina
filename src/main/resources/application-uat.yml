@@ -12,8 +12,8 @@ jwt:
   # use sign or the rsa path
   sign: andromeda
   # use this or the rsa path
-  rsaPrivatePath: src/main/resources/jwt-private.pem
-  rsaPublicPath: src/main/resources/jwt-public.pem
+  rsaPrivatePath: config/jwt-private.pem
+  rsaPublicPath: config/jwt-public.pem
   expMinute: 10
   refreshExpMinute: 60
 
