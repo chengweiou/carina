@@ -30,6 +30,6 @@ services:
     ports:
       - 5433:80
     environment:
-      PGADMIN_DEFAULT_EMAIL: chengwei.ou.dora@gmail.com
+      PGADMIN_DEFAULT_EMAIL: aaa@chengweiou.com
       PGADMIN_DEFAULT_PASSWORD: aaa
     image: dpage/pgadmin4
