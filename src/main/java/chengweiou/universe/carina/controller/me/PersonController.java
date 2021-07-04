@@ -5,8 +5,12 @@ import chengweiou.universe.blackhole.exception.ParamException;
 import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.carina.base.converter.Account;
+import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.service.person.PersonService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,5 +28,13 @@ public class PersonController {
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
         Person indb = service.findById(loginAccount.getPerson());
         return Rest.ok(indb);
+    }
+
+    // 用于显示聊天室内的名字，头像
+    @GetMapping("/person")
+    public Rest<List<Person>> find(SearchCondition searchCondition) {
+        List<Person> list = service.find(searchCondition);
+        list.stream().forEach(e -> e.setUnread(null));
+        return Rest.ok(list);
     }
 }

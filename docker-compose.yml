@@ -1,27 +1,35 @@
 services:
   carina:
     container_name: carina
-    ports: 
+    ports:
       - 60006:8906
-    volumes: 
+    volumes:
       - ~/Desktop/docker/universe/carina:/proj
     working_dir: /proj/
-    image: openjdk
+    image: openjdk:11
     command: java -jar ser.jar --spring.config.location=optional:classpath:/,optional:classpath:/config/,optional:file:./,optional:file:./config/
-    depends_on: 
+    depends_on:
       - redis
   pgsql:
     container_name: pgsql
-    ports: 
+    ports:
       - 5432:5432
-    volumes: 
+    volumes:
       - ~/Desktop/docker/pgsql/data:/var/lib/postgresql/data
-    environment: 
+    environment:
       - POSTGRES_PASSWORD=123456
     image: postgres
-  redis: 
+  redis:
     container_name: redis
-    ports: 
+    ports:
       - 6379:6379
     image: redis
 
+  pgadmin:
+    container_name: pgadmin
+    ports:
+      - 5433:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: chengwei.ou.dora@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: aaa
+    image: dpage/pgadmin4

@@ -31,3 +31,7 @@ docker run --rm -it --name pgsql -p 5432:5432 --network net -v ~/Desktop/docker/
 docker run --rm -it -d --name redis -p 6379:6379 --network net -d redis
 docker run --rm -it -d --name carina -p 60006:8906 --network net -v /Users/chengweiou/Desktop/docker/universe/carina:/proj/ -w /proj/ openjdk java -jar ser.jar
 ```
+
+### todo
+目前gson没支持最新jdk。 docker 需要用jdk11
+new Gson().fromJson(accountJson, Account.class); 回报localdatetime错误
