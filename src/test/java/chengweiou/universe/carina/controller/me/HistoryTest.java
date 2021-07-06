@@ -1,13 +1,12 @@
 package chengweiou.universe.carina.controller.me;
 
-
 import chengweiou.universe.blackhole.model.BasicRestCode;
 import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.blackhole.model.Rest;
+import chengweiou.universe.blackhole.util.GsonUtil;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.data.Data;
 import chengweiou.universe.carina.model.entity.person.Person;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,7 @@ public class HistoryTest {
 	@Test
 	public void count() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/me/history/count")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 				.param("room.id", data.roomList.get(0).getId().toString())
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> rest = Rest.from(result, Long.class);
@@ -45,7 +44,7 @@ public class HistoryTest {
 	@Test
 	public void find() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/me/history")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 				.param("room.id", data.roomList.get(0).getId().toString())
 		).andReturn().getResponse().getContentAsString();
 		Rest<List<Account>> rest = Rest.from(result, List.class);

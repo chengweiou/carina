@@ -4,10 +4,10 @@ package chengweiou.universe.carina.controller.me;
 import chengweiou.universe.blackhole.model.BasicRestCode;
 import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.blackhole.model.Rest;
+import chengweiou.universe.blackhole.util.GsonUtil;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.data.Data;
 import chengweiou.universe.carina.model.entity.person.Person;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,14 +34,14 @@ public class FriendTest {
 	@Test
 	public void saveDelete() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/me/friend")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 				.param("target.id", "30")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result, Long.class);
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode(), saveRest.getMessage());
 
 		result = mvc.perform(MockMvcRequestBuilders.delete("/me/friend/" + saveRest.getData())
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> delRest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.OK, delRest.getCode());
@@ -50,7 +50,7 @@ public class FriendTest {
 	@Test
 	public void saveDeleteFail() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/me/friend")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.PARAM, saveRest.getCode());
@@ -59,7 +59,7 @@ public class FriendTest {
 	@Test
 	public void check() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/me/friend/check")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 				.param("target.id", "30")
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> saveRest = Rest.from(result);
@@ -70,7 +70,7 @@ public class FriendTest {
 	@Test
 	public void updateFail() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/me/friend")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> rest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.PARAM, rest.getCode());
@@ -78,7 +78,7 @@ public class FriendTest {
 	@Test
 	public void count() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/me/friend/count")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 		).andReturn().getResponse().getContentAsString();
 		Rest<Long> rest = Rest.from(result, Long.class);
 		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());
@@ -88,7 +88,7 @@ public class FriendTest {
 	@Test
 	public void find() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/me/friend")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 				.param("target.id", "chi")
 		).andReturn().getResponse().getContentAsString();
 		Rest<List<Account>> rest = Rest.from(result, List.class);

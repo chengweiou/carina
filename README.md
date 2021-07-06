@@ -34,4 +34,4 @@ docker run --rm -it -d --name carina -p 60006:8906 --network net -v /Users/cheng
 
 ### todo
 目前gson没支持最新jdk。 docker 需要用jdk11
-new Gson().fromJson(accountJson, Account.class); 回报localdatetime错误
+GsonUtil.create().fromJson(accountJson, Account.class); 回报localdatetime错误

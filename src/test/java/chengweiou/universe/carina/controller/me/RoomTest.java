@@ -1,15 +1,6 @@
 package chengweiou.universe.carina.controller.me;
 
 
-import chengweiou.universe.blackhole.model.BasicRestCode;
-import chengweiou.universe.blackhole.model.Builder;
-import chengweiou.universe.blackhole.model.Rest;
-import chengweiou.universe.carina.base.converter.Account;
-import chengweiou.universe.carina.data.Data;
-import chengweiou.universe.carina.model.entity.person.Person;
-import chengweiou.universe.carina.model.entity.room.Room;
-import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +11,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import chengweiou.universe.blackhole.model.BasicRestCode;
+import chengweiou.universe.blackhole.model.Builder;
+import chengweiou.universe.blackhole.model.Rest;
+import chengweiou.universe.blackhole.util.GsonUtil;
+import chengweiou.universe.carina.base.converter.Account;
+import chengweiou.universe.carina.data.Data;
+import chengweiou.universe.carina.model.entity.person.Person;
+import chengweiou.universe.carina.model.entity.room.Room;
+import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -36,7 +37,7 @@ public class RoomTest {
 	@Test
 	public void enterRoom() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.get("/me/room")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 				.param("personIdList", "2")
 			).andReturn().getResponse().getContentAsString();
 		Rest<Room> saveRest = Rest.from(result, Room.class);
@@ -46,7 +47,7 @@ public class RoomTest {
 	@Test
 	public void leaveRoom() throws Exception {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/me/room/" + data.roomList.get(0).getId() + "/leave")
-				.header("loginAccount", new Gson().toJson(loginAccount))
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 		).andReturn().getResponse().getContentAsString();
 		Rest<Boolean> saveRest = Rest.from(result);
 		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());

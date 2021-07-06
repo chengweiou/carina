@@ -1,25 +1,27 @@
 package chengweiou.universe.carina.websocket;
 
-import chengweiou.universe.blackhole.model.Rest;
-import chengweiou.universe.blackhole.param.Valid;
-import chengweiou.universe.carina.model.entity.history.History;
-import chengweiou.universe.carina.model.entity.person.Person;
-import chengweiou.universe.carina.service.message.MsgService;
-import com.google.gson.*;
-import eu.bitwalker.useragentutils.DeviceType;
-import eu.bitwalker.useragentutils.UserAgent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.socket.*;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
-
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.PongMessage;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import chengweiou.universe.blackhole.model.Rest;
+import chengweiou.universe.blackhole.param.Valid;
+import chengweiou.universe.blackhole.util.GsonUtil;
+import chengweiou.universe.carina.model.entity.history.History;
+import chengweiou.universe.carina.model.entity.person.Person;
+import chengweiou.universe.carina.service.message.MsgService;
+import eu.bitwalker.useragentutils.DeviceType;
+import eu.bitwalker.useragentutils.UserAgent;
 
 @Service
 public class TextHandler extends TextWebSocketHandler {
@@ -61,7 +63,7 @@ public class TextHandler extends TextWebSocketHandler {
             session.close();
             return;
         }
-        History history = createGson().fromJson(message.getPayload(), History.class);
+        History history = GsonUtil.create().fromJson(message.getPayload(), History.class);
         Valid.check("history.room", history.getRoom()).isNotNull();
         Valid.check("history.room.id", history.getRoom().getId()).is().positive();
         Valid.check("history.v", history.getV()).is().lengthIn(100);
@@ -72,7 +74,7 @@ public class TextHandler extends TextWebSocketHandler {
             e.setExtra(history.getExtra());
             e.updateAt();
             try {
-                String rest = createGson().toJson(Rest.ok(e));
+                String rest = GsonUtil.create().toJson(Rest.ok(e));
                 WebSocketSession targetSession = PC_SESSION_MAP.get(e.getPerson().getId());
                 if (targetSession != null) targetSession.sendMessage(new TextMessage(rest));
                 targetSession = PHONE_SESSION_MAP.get(e.getPerson().getId());
@@ -82,16 +84,6 @@ public class TextHandler extends TextWebSocketHandler {
             }
         }
         super.handleTextMessage(session, message);
-    }
-
-    private Gson createGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, (JsonDeserializer) (json, typeOfT, context) -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDate())
-                .registerTypeAdapter(LocalDate.class, (JsonSerializer) (v, typeOfT, context) -> new JsonPrimitive(v.toString()))
-                .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer) (json, typeOfT, context) -> ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime())
-                .registerTypeAdapter(LocalDateTime.class, (JsonSerializer) (v, typeOfT, context) -> new JsonPrimitive(v.toString()))
-                .create();
-
     }
 
     @Override
