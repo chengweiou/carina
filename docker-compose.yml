@@ -24,12 +24,3 @@ services:
     ports:
       - 6379:6379
     image: redis
-
-  pgadmin:
-    container_name: pgadmin
-    ports:
-      - 5433:80
-    environment:
-      PGADMIN_DEFAULT_EMAIL: aaa@chengweiou.com
-      PGADMIN_DEFAULT_PASSWORD: aaa
-    image: dpage/pgadmin4
