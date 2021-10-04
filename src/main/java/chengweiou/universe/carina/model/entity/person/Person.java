@@ -1,36 +1,47 @@
 package chengweiou.universe.carina.model.entity.person;
 
-import chengweiou.universe.blackhole.model.NotNullObj;
-import chengweiou.universe.blackhole.model.NullObj;
-import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import chengweiou.universe.blackhole.model.NullObj;
+import chengweiou.universe.carina.base.entity.DtoEntity;
+import chengweiou.universe.carina.base.entity.ServiceEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class Person implements NotNullObj, Serializable {
-    private Long id;
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class Person extends ServiceEntity {
     private String name;
     private String imgsrc;
     private Integer unread;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
 
     public void fillNotRequire() {
         imgsrc = imgsrc!=null ? imgsrc : "";
         unread = unread!=null ? unread : 0;
     }
 
-    public void createAt() {
-        createAt = LocalDateTime.now(ZoneId.of("UTC"));
-    }
-    public void updateAt() {
-        updateAt = LocalDateTime.now(ZoneId.of("UTC"));
-    }
-
     public static final Person NULL = new Person.Null();
     public static class Null extends Person implements NullObj {
     }
+    public Dto toDto() {
+        Dto result = new Dto();
+        BeanUtils.copyProperties(this, result);
+        return result;
+    }
+    @Data
+    @ToString(callSuper = true)
+    @EqualsAndHashCode(callSuper = true)
+    public static class Dto extends DtoEntity {
+        private String name;
+        private String imgsrc;
+        private Integer unread;
 
+        public Person toBean() {
+            Person result = new Person();
+            BeanUtils.copyProperties(this, result);
+            return result;
+        }
+    }
 }

@@ -3,6 +3,7 @@ package chengweiou.universe.carina.controller.me;
 
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.blackhole.exception.ParamException;
+import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.carina.base.converter.Account;
@@ -20,7 +21,7 @@ public class RoomController {
     private RoomService service;
 
     @GetMapping("/room")
-    public Rest<Long> enterRoom(Room e, @RequestHeader("loginAccount") Account loginAccount)  throws ParamException, FailException {
+    public Rest<Long> enterRoom(Room e, @RequestHeader("loginAccount") Account loginAccount)  throws ParamException, FailException, ProjException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
         Valid.check("room.id | personIdList", e.getId(), e.getPersonIdList()).are().notAllNull();

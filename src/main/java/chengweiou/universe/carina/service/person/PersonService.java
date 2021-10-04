@@ -3,21 +3,44 @@ package chengweiou.universe.carina.service.person;
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.person.Person;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface PersonService {
-    void save(Person e) throws FailException;
+@Service
+public class PersonService {
+    @Autowired
+    private PersonDio dio;
 
-    void delete(Person e) throws FailException;
+    public void save(Person e) throws FailException {
+        e.setUnread(0);
+        dio.save(e);
+    }
 
-    long update(Person e);
+    public void delete(Person e) throws FailException {
+        dio.delete(e);
+    }
 
-    Person findById(Person e);
+    public long update(Person e) {
+        return dio.update(e);
+    }
 
-    long count(SearchCondition searchCondition);
-    List<Person> find(SearchCondition searchCondition);
+    public Person findById(Person e) {
+        return dio.findById(e);
+    }
 
-    long count(SearchCondition searchCondition, Person sample);
-    List<Person> find(SearchCondition searchCondition, Person sample);
+    public long count(SearchCondition searchCondition) {
+        return dio.count(searchCondition, null);
+    }
+    public List<Person> find(SearchCondition searchCondition) {
+        return dio.find(searchCondition, null);
+    }
+
+    public long count(SearchCondition searchCondition, Person sample) {
+        return dio.count(searchCondition, sample);
+    }
+    public List<Person> find(SearchCondition searchCondition, Person sample) {
+        return dio.find(searchCondition, sample);
+    }
 }

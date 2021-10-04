@@ -1,27 +1,26 @@
 package chengweiou.universe.carina.model.entity.friend;
 
-import chengweiou.universe.blackhole.model.NotNullObj;
+import org.springframework.beans.BeanUtils;
+
+import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.blackhole.model.NullObj;
+import chengweiou.universe.carina.base.entity.DtoEntity;
+import chengweiou.universe.carina.base.entity.DtoKey;
+import chengweiou.universe.carina.base.entity.ServiceEntity;
 import chengweiou.universe.carina.model.entity.person.Person;
 import lombok.Data;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class Friend implements NotNullObj, Serializable {
-    private Long id;
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class Friend extends ServiceEntity {
     private Person person;
     private Person target;
-    private LocalDateTime updateAt;
 
     public void fillNotRequire() {
 
-    }
-
-    public void updateAt() {
-        updateAt = LocalDateTime.now(ZoneId.of("UTC"));
     }
 
     public static final Friend NULL = new Friend.Null();
@@ -29,5 +28,28 @@ public class Friend implements NotNullObj, Serializable {
         @Override public Person getPerson() { return Person.NULL; }
         @Override public Person getTarget() { return Person.NULL; }
     }
+    public Dto toDto() {
+        Dto result = new Dto();
+        BeanUtils.copyProperties(this, result);
+        if (person != null) result.setPersonId(person.getId());
+        if (target != null) result.setTargetId(target.getId());
+        return result;
+    }
+    @Data
+    @ToString(callSuper = true)
+    @EqualsAndHashCode(callSuper = true)
+    public static class Dto extends DtoEntity {
+        @DtoKey
+        private Long personId;
+        @DtoKey
+        private Long targetId;
 
+        public Friend toBean() {
+            Friend result = new Friend();
+            BeanUtils.copyProperties(this, result);
+            result.setPerson(Builder.set("id", personId).to(new Person()));
+            result.setTarget(Builder.set("id", targetId).to(new Person()));
+            return result;
+        }
+    }
 }

@@ -1,17 +1,18 @@
 package chengweiou.universe.carina.service.room;
 
 
-import chengweiou.universe.blackhole.exception.FailException;
-import chengweiou.universe.carina.model.SearchCondition;
-import chengweiou.universe.carina.model.entity.room.Room;
-import chengweiou.universe.carina.dao.room.RoomDao;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import chengweiou.universe.blackhole.exception.FailException;
+import chengweiou.universe.blackhole.exception.ProjException;
+import chengweiou.universe.blackhole.model.BasicRestCode;
+import chengweiou.universe.carina.dao.room.RoomDao;
+import chengweiou.universe.carina.model.SearchCondition;
+import chengweiou.universe.carina.model.entity.room.Room;
 
 
 @Component
@@ -19,64 +20,49 @@ public class RoomDio {
     @Autowired
     private RoomDao dao;
 
-    public void save(Room e) throws FailException {
+    public void save(Room e) throws FailException, ProjException {
+        long count = dao.countByKey(e.toDto());
+        if (count != 0) throw new ProjException("dup key: type:" + e.getType() + ", personIdList:" + e.getPersonIdList() + " exists", BasicRestCode.EXISTS);
         e.fillNotRequire();
         e.createAt();
         e.updateAt();
-        setString(e);
-        long count = dao.save(e);
+        Room.Dto dto = e.toDto();
+        count = dao.save(dto);
         if (count != 1) throw new FailException();
+        e.setId(dto.getId());
     }
 
     public void delete(Room e) throws FailException {
-        long count = dao.delete(e);
+        long count = dao.delete(e.toDto());
         if (count != 1) throw new FailException();
     }
 
     public long update(Room e) {
-        if (e.getPersonIdList() != null) setString(e);
         e.updateAt();
-        return dao.update(e);
+        return dao.update(e.toDto());
     }
 
     public Room findById(Room e) {
-        Room result = dao.findById(e);
+        Room.Dto result = dao.findById(e.toDto());
         if (result == null) return Room.NULL;
-        setList(Arrays.asList(result));
-        return result;
+        return result.toBean();
+    }
+    public long countByKey(Room e) {
+        return dao.countByKey(e.toDto());
     }
     public Room findByKey(Room e) {
-        setString(e);
-        Room result = dao.findByKey(e);
+        Room.Dto result = dao.findByKey(e.toDto());
         if (result == null) return Room.NULL;
-        setList(Arrays.asList(result));
-        return result;
+        return result.toBean();
     }
-
     public long count(SearchCondition searchCondition, Room sample) {
-        if (sample != null) {
-            if (sample.getPersonIdList() != null) setString(sample);
-        }
-        return dao.count(searchCondition, sample);
+        return dao.count(searchCondition, sample!=null ? sample.toDto() : null);
     }
 
     public List<Room> find(SearchCondition searchCondition, Room sample) {
-        if (sample != null) {
-            if (sample.getPersonIdList() != null) setString(sample);
-        }
         searchCondition.setDefaultSort("updateAt");
-        List<Room> result = dao.find(searchCondition, sample);
-        setList(result);
+        List<Room.Dto> dtoList = dao.find(searchCondition, sample!=null ? sample.toDto() : null);
+        List<Room> result = dtoList.stream().map(e -> e.toBean()).collect(Collectors.toList());
         return result;
-    }
-
-    private void setList(List<Room> list) {
-        list.parallelStream().filter(e -> !e.getPersonIdListString().isEmpty()).forEach(e -> {
-            e.setPersonIdList(Pattern.compile(",").splitAsStream(e.getPersonIdListString()).map(Long::valueOf).collect(Collectors.toList()));
-        });
-
-    }
-    private void setString(Room room) {
-        room.setPersonIdListString(room.getPersonIdList().stream().distinct().sorted().map(String::valueOf).collect(Collectors.joining(",")));
     }
 }

@@ -14,55 +14,32 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.jdbc.SQL;
 import org.springframework.stereotype.Repository;
 
+import chengweiou.universe.carina.base.dao.BaseDao;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.room.Room;
+import chengweiou.universe.carina.model.entity.room.Room.Dto;
 
 @Repository
 @Mapper
-public interface RoomDao {
-
-    @Insert("insert into room(type, personIdListString, createAt, updateAt) values" +
-            "(#{type}, #{personIdListString}, #{createAt}, #{updateAt})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    long save(Room e);
-
-    @Delete("delete from room where id=#{id}")
-    long delete(Room e);
-
-    @UpdateProvider(type = Sql.class, method = "update")
-    long update(Room e);
-
-    @Select("select * from room where id=#{id}")
-    Room findById(Room e);
-    @Select("select * from room where type=#{type} and personIdListString=#{personIdListString}")
-    Room findByKey(Room e);
+public interface RoomDao extends BaseDao<Dto> {
 
     @SelectProvider(type = Sql.class, method = "count")
-    long count(@Param("searchCondition") SearchCondition searchCondition, @Param("sample") Room sample);
+    long count(@Param("searchCondition") SearchCondition searchCondition, @Param("sample") Dto sample);
 
     @SelectProvider(type = Sql.class, method = "find")
-    List<Room> find(@Param("searchCondition") SearchCondition searchCondition, @Param("sample") Room sample);
+    List<Dto> find(@Param("searchCondition") SearchCondition searchCondition, @Param("sample") Dto sample);
 
     class Sql {
-        public String update(final Room e) {
-            return new SQL() {{
-                UPDATE("room");
-                if (e.getType() != null) SET("type = #{type}");
-                if (e.getPersonIdListString() != null) SET("personIdListString = #{personIdListString}");
-                SET("updateAt = #{updateAt}");
-                WHERE("id=#{id}");
-            }}.toString();
-        }
 
-        public String count(@Param("searchCondition")final SearchCondition searchCondition, @Param("sample")final Room sample) {
+        public String count(@Param("searchCondition")final SearchCondition searchCondition, @Param("sample")final Dto sample) {
             return baseFind(searchCondition, sample).SELECT("count(*)").toString();
         }
 
-        public String find(@Param("searchCondition")final SearchCondition searchCondition, @Param("sample")final Room sample) {
+        public String find(@Param("searchCondition")final SearchCondition searchCondition, @Param("sample")final Dto sample) {
             return baseFind(searchCondition, sample).SELECT("*").toString().concat(searchCondition.getOrderBy()).concat(searchCondition.getSqlLimit());
         }
 
-        private SQL baseFind(SearchCondition searchCondition, Room sample) {
+        private SQL baseFind(SearchCondition searchCondition, Dto sample) {
             return new SQL() {{
                 FROM("room");
                 if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");

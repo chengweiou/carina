@@ -5,6 +5,7 @@ import org.springframework.format.Formatter;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
@@ -14,7 +15,11 @@ public class LocalDateTimeFormatter implements Formatter<LocalDateTime> {
         try {
             return LocalDateTime.parse(text);
         } catch(DateTimeParseException ex) {
-            return LocalDate.parse(text).atStartOfDay();
+            try {
+                return LocalDate.parse(text).atStartOfDay();
+            } catch(DateTimeParseException ex1) {
+                return ZonedDateTime.parse(text).toLocalDateTime();
+            }
         }
     }
 

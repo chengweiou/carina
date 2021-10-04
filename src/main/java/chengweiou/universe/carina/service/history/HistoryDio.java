@@ -21,13 +21,17 @@ public class HistoryDio {
 
     public void save(History e) throws FailException {
         e.fillNotRequire();
+        e.fillNotRequire();
+        e.createAt();
         e.updateAt();
-        long count = dao.save(e);
+        History.Dto dto = e.toDto();
+        long count = dao.save(dto);
         if (count != 1) throw new FailException();
+        e.setId(dto.getId());
     }
 
     public void delete(History e) throws FailException {
-        long count = dao.delete(e);
+        long count = dao.delete(e.toDto());
         if (count != 1) throw new FailException();
     }
 
@@ -40,25 +44,28 @@ public class HistoryDio {
 
     public long update(History e) {
         e.updateAt();
-        return dao.update(e);
+        return dao.update(e.toDto());
     }
 
     public long updateUnreadByRoomAndPerson(History e) {
         e.updateAt();
-        return dao.updateByRoomAndPerson(e);
+        return dao.updateByRoomAndPerson(e.toDto());
     }
 
     public History findById(History e) {
-        History result = dao.findById(e);
-        return result!=null ? result : History.NULL;
+        History.Dto result = dao.findById(e.toDto());
+        if (result == null) return History.NULL;
+        return result.toBean();
     }
 
     public long count(SearchCondition searchCondition, History sample) {
-        return dao.count(searchCondition, sample);
+        return dao.count(searchCondition, sample!=null ? sample.toDto() : null);
     }
 
     public List<History> find(SearchCondition searchCondition, History sample) {
         searchCondition.setDefaultSort("updateAt");
-        return dao.find(searchCondition, sample);
+        List<History.Dto> dtoList = dao.find(searchCondition, sample!=null ? sample.toDto() : null);
+        List<History> result = dtoList.stream().map(e -> e.toBean()).collect(Collectors.toList());
+        return result;
     }
 }
