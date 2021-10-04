@@ -1,6 +1,7 @@
 package chengweiou.universe.carina.service;
 
 import chengweiou.universe.blackhole.exception.FailException;
+import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.carina.data.Data;
 import chengweiou.universe.carina.model.SearchCondition;
@@ -31,7 +32,7 @@ public class RoomTest {
 	private Data data;
 
 	@Test
-	public void saveDelete() throws FailException {
+	public void saveDelete() throws FailException, ProjException {
 		Room e = Builder.set("type", RoomType.SOLO).to(new Room());
 		service.save(e);
 		Assertions.assertEquals(true, e.getId()> 0);
@@ -45,7 +46,7 @@ public class RoomTest {
 		long count = service.update(e);
 		Assertions.assertEquals(1, count);
 		Room indb = service.findById(e);
-		Assertions.assertEquals("100", indb.getPersonIdListString());
+		Assertions.assertEquals(Arrays.asList(100L), indb.getPersonIdList());
 		Builder.set("personIdList", old).to(e);
 		service.update(e);
 	}
@@ -63,14 +64,14 @@ public class RoomTest {
 	}
 
 	@Test
-	public void enterRoomById() throws FailException {
+	public void enterRoomById() throws FailException, ProjException {
 		Room e = Builder.set("id", data.roomList.get(0).getId()).to(new Room());
 		Room indb = service.enter(e);
 		Assertions.assertEquals(data.roomList.get(0).getId(), indb.getId());
 	}
 
 	@Test
-	public void enterRoomNew() throws FailException {
+	public void enterRoomNew() throws FailException, ProjException {
 		Room e = Builder.set("personIdList", Arrays.asList(1L, 3L)).set("type", RoomType.SOLO).to(new Room());
 		Room indb = service.enter(e);
 		Assertions.assertEquals(true, e.getId()> 0);
@@ -83,14 +84,14 @@ public class RoomTest {
 	}
 
 	@Test
-	public void enterRoomOld() throws FailException {
+	public void enterRoomOld() throws FailException, ProjException {
 		Room e = Builder.set("personIdList", Arrays.asList(2L, 1L)).set("type", RoomType.SOLO).to(new Room());
 		Room indb = service.enter(e);
 		Assertions.assertEquals(data.roomList.get(0).getId(), indb.getId());
 	}
 
 	@Test
-	public void createGroup() throws FailException {
+	public void createGroup() throws FailException, ProjException {
 		Room e = Builder.set("personIdList", Arrays.asList(1L,2L,3L,4L)).set("type", RoomType.GROUP).to(new Room());
 		Room indb = service.createGroup(e, "service-test", "");
 		Assertions.assertEquals(true, indb.getId() > 0);
@@ -103,7 +104,7 @@ public class RoomTest {
 	}
 
 	@Test
-	public void enterRoomOldGroup() throws FailException {
+	public void enterRoomOldGroup() throws FailException, ProjException {
 		Room e = Builder.set("personIdList", Arrays.asList(1L,2L,3L)).set("type", RoomType.GROUP).to(new Room());
 		Room indb = service.enter(e);
 		Assertions.assertEquals(data.roomList.get(1).getId(), indb.getId());

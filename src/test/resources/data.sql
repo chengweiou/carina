@@ -19,14 +19,12 @@ insert into personRoomRelate(personId, roomId, name, imgsrc, unread, lastMessage
     (3, 2, 'backyard', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00')
 ;
 
-insert into history(roomId, personId, senderId, type, v, unread, updateAt) values
-    (1, 1, 1, 'TEXT', 'v 1', false, '2019-01-01T00:00:00'),
-    (1, 2, 1, 'TEXT', 'v 2', true, '2019-01-01T00:00:00')
+insert into history(roomId, personId, senderId, type, v, unread, createAt, updateAt) values
+    (1, 1, 1, 'TEXT', 'v 1', false, '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
+    (1, 2, 1, 'TEXT', 'v 2', true, '2019-01-01T00:00:00', '2019-01-01T00:00:00')
 ;
 
-insert into friend(personId, targetId, updateAt) values
-    (1, 2, '2019-01-01T00:00:00'),
-    (2, 1, '2019-01-01T00:00:00')
+insert into friend(personId, targetId, createAt, updateAt) values
+    (1, 2, '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
+    (2, 1, '2019-01-01T00:00:00', '2019-01-01T00:00:00')
 ;
-
-

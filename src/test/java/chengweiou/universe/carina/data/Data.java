@@ -48,4 +48,13 @@ public class Data {
         friendList = friendDio.find(new SearchCondition(), null).stream().sorted(Comparator.comparingLong(Friend::getId)).collect(Collectors.toList());
 
     }
+
+    /**
+     * 放在 @AfterEach 可用于发现哪个测试的导致数据数量变化
+     */
+    public void check() {
+        long historyCount = historyDio.count(new SearchCondition(), null);
+        assert historyCount == historyList.size();
+    }
+
 }

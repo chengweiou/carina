@@ -1,6 +1,7 @@
 package chengweiou.universe.carina.service;
 
 import chengweiou.universe.blackhole.exception.FailException;
+import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.carina.data.Data;
 import chengweiou.universe.carina.model.SearchCondition;
@@ -25,7 +26,7 @@ public class FriendTest {
 	private Data data;
 
 	@Test
-	public void saveDelete() throws FailException {
+	public void saveDelete() throws FailException, ProjException {
 		Friend e = Builder.set("person", data.personList.get(1)).set("target", data.personList.get(2)).to(new Friend());
 		service.save(e);
 		Assertions.assertEquals(true, e.getId()> 0);
@@ -45,7 +46,7 @@ public class FriendTest {
 	}
 
 	@Test
-	public void saveOrUpdate() throws FailException {
+	public void saveOrUpdate() throws FailException, ProjException {
 		Friend e1 = Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend());
 		service.saveOrUpdate(e1);
 		Friend e2 = Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend());

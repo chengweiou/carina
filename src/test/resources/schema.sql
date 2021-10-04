@@ -44,6 +44,7 @@ CREATE TABLE history (
     type character varying NOT NULL,
     v text NOT NULL,
     unread boolean NOT NULL,
+    createAt timestamp without time zone NOT NULL,
     updateAt timestamp without time zone NOT NULL,
     PRIMARY KEY (id)
 );
@@ -53,6 +54,7 @@ CREATE TABLE friend (
     id bigserial NOT NULL,
     personId bigserial NOT NULL,
     targetId bigserial NOT NULL,
+    createAt timestamp without time zone NOT NULL,
     updateAt timestamp without time zone NOT NULL,
     PRIMARY KEY (id)
 );

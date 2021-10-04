@@ -14,6 +14,8 @@ import chengweiou.universe.carina.service.message.MsgService;
 import chengweiou.universe.carina.service.person.PersonDio;
 import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
 import chengweiou.universe.carina.service.room.RoomService;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -164,7 +166,9 @@ public class MsgTest {
 		List<History> h1AllList = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(0)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(1, h1AllList.size());
 		Assertions.assertEquals(false, h1AllList.get(0).getUnread());
-		historyDio.delete(h1List);
+		historyDio.delete(h1AllList);
+
+
 		// 对方 第一次未读，之后已读
 		List<History> h2List = service.read(new SearchCondition(), data.personList.get(1), data.roomList.get(1));
 		Assertions.assertEquals(1, h2List.size());
@@ -194,6 +198,7 @@ public class MsgTest {
 		personRoomRelateDio.update(data.personRoomRelateList.get(2));
 		personRoomRelateDio.update(data.personRoomRelateList.get(3));
 		personRoomRelateDio.update(data.personRoomRelateList.get(4));
+
 	}
 
 	@Test
@@ -319,5 +324,9 @@ public class MsgTest {
 	@BeforeEach
 	public void init() {
 		data.init();
+	}
+	@AfterEach
+	public void check() {
+		data.check();
 	}
 }
