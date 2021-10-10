@@ -36,7 +36,7 @@ public class RoomTest {
 
 	@Test
 	public void enterRoom() throws Exception {
-		String result = mvc.perform(MockMvcRequestBuilders.get("/me/room")
+		String result = mvc.perform(MockMvcRequestBuilders.post("/me/room")
 				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 				.param("personIdList", "2")
 			).andReturn().getResponse().getContentAsString();

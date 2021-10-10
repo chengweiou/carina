@@ -20,7 +20,7 @@ public class RoomController {
     @Autowired
     private RoomService service;
 
-    @GetMapping("/room")
+    @PostMapping("/room")
     public Rest<Long> enterRoom(Room e, @RequestHeader("loginAccount") Account loginAccount)  throws ParamException, FailException, ProjException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
