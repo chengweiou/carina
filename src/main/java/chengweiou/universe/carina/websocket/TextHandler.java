@@ -39,12 +39,12 @@ public class TextHandler extends TextWebSocketHandler {
         switch (getDeviceType(session)) {
             case COMPUTER: {
                 // 切换设备
-                if (PC_SESSION_MAP.containsKey(person.getId())) session.close();
+                if (PC_SESSION_MAP.containsKey(person.getId())) PC_SESSION_MAP.get(person.getId()).close();
                 PC_SESSION_MAP.put(person.getId(), session);
                 break;
             }
             default: {
-                if (PHONE_SESSION_MAP.containsKey(person.getId())) session.close();
+                if (PHONE_SESSION_MAP.containsKey(person.getId())) PHONE_SESSION_MAP.get(person.getId()).close();
                 PHONE_SESSION_MAP.put(person.getId(), session);
             }
 
