@@ -17,6 +17,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.blackhole.util.GsonUtil;
+import chengweiou.universe.blackhole.util.LogUtil;
 import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.service.message.MsgService;
@@ -103,14 +104,14 @@ public class TextHandler extends TextWebSocketHandler {
 
     @Override
     protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
-        System.out.println("handlePongMessage");
+        LogUtil.i("handlePongMessage");
 
         super.handlePongMessage(session, message);
     }
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        System.out.println("handleTransportError");
+        LogUtil.i("handleTransportError");
         super.handleTransportError(session, exception);
     }
 

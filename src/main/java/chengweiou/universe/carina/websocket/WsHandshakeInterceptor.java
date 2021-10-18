@@ -1,5 +1,7 @@
 package chengweiou.universe.carina.websocket;
 
+import chengweiou.universe.blackhole.exception.UnauthException;
+import chengweiou.universe.blackhole.util.LogUtil;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.base.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,13 @@ public class WsHandshakeInterceptor implements HandshakeInterceptor {
         String path = request.getURI().getPath();
         String token = path.substring(path.lastIndexOf("/") + 1);
         attributes.put("token", token);
-        Account account = jwtUtil.verify(token);
-        attributes.put("user", account.getPerson());
+        try {
+            Account account = jwtUtil.verify(token);
+            attributes.put("user", account.getPerson());
+        } catch (UnauthException ex) {
+            LogUtil.i("ws handshake fail: token: " + token);
+            return false;
+        }
         return true;
     }
 
