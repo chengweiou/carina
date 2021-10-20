@@ -52,6 +52,7 @@ public class JwtUtil {
     }
 
     public Account verify(String token) throws UnauthException {
+        if (token == null) throw new UnauthException();
         Algorithm algorithm = useRsa ? Algorithm.RSA256(rsaPublicKey, rsaPrivateKey) : Algorithm.HMAC512(config.getSign());
         return verify(token, algorithm);
     }
