@@ -71,6 +71,15 @@ public class JwtUtil {
             throw new UnauthException();
         }
     }
+    
+    public Account decode(String token) throws UnauthException {
+        if (token == null) throw new UnauthException();
+        DecodedJWT jwt = JWT.decode(token);
+        return Builder
+                .set("person", Builder.set("id", jwt.getClaim("personId").asLong()).to(new Person()))
+                .set("extra", jwt.getClaim("extra").asString())
+            .to(new Account());
+    }
 
     private boolean useRsa;
     private RSAPublicKey rsaPublicKey;

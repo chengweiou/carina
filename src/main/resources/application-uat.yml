@@ -19,6 +19,7 @@ jwt:
 
 site:
   andromeda: http://andromeda:8906/andromeda
+  leob: http://leob:8906/leob
 
 proj:
   serverHistory: false
