@@ -1,6 +1,7 @@
 package chengweiou.universe.carina.service.friend;
 
 
+import chengweiou.universe.blackhole.dao.BaseSQL;
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.model.BasicRestCode;
@@ -57,14 +58,28 @@ public class FriendDio {
     }
 
     public long count(SearchCondition searchCondition, Friend sample) {
-        return dao.count(searchCondition, sample!=null ? sample.toDto() : null);
+        Friend.Dto dtoSample = sample!=null ? sample.toDto() : Friend.NULL.toDto();
+        String where = baseFind(searchCondition, dtoSample);
+        return dao.count(searchCondition, dtoSample, where);
     }
 
     public List<Friend> find(SearchCondition searchCondition, Friend sample) {
         searchCondition.setDefaultSort("updateAt");
-        List<Friend.Dto> dtoList = dao.find(searchCondition, sample!=null ? sample.toDto() : null);
+        Friend.Dto dtoSample = sample!=null ? sample.toDto() : Friend.NULL.toDto();
+        String where = baseFind(searchCondition, dtoSample);
+        List<Friend.Dto> dtoList = dao.find(searchCondition, dtoSample, where);
         List<Friend> result = dtoList.stream().map(e -> e.toBean()).collect(Collectors.toList());
         return result;
+    }
+
+    private String baseFind(SearchCondition searchCondition, Friend.Dto sample) {
+        return new BaseSQL() {{
+            if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
+            if (sample != null) {
+                if (sample.getPersonId() != null) WHERE("personId = #{sample.personId}");
+                if (sample.getTargetId() != null) WHERE("targetId = #{sample.targetId}");
+            }
+        }}.toString();
     }
 
 }

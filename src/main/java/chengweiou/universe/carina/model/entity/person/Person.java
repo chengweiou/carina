@@ -3,8 +3,8 @@ package chengweiou.universe.carina.model.entity.person;
 import org.springframework.beans.BeanUtils;
 
 import chengweiou.universe.blackhole.model.NullObj;
-import chengweiou.universe.carina.base.entity.DtoEntity;
-import chengweiou.universe.carina.base.entity.ServiceEntity;
+import chengweiou.universe.blackhole.model.entity.DtoEntity;
+import chengweiou.universe.blackhole.model.entity.ServiceEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

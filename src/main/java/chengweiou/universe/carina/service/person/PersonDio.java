@@ -1,6 +1,7 @@
 package chengweiou.universe.carina.service.person;
 
 
+import chengweiou.universe.blackhole.dao.BaseSQL;
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.person.Person;
@@ -44,14 +45,29 @@ public class PersonDio {
     }
 
     public long count(SearchCondition searchCondition, Person sample) {
-        return dao.count(searchCondition, sample!=null ? sample.toDto() : null);
+        Person.Dto dtoSample = sample!=null ? sample.toDto() : Person.NULL.toDto();
+        String where = baseFind(searchCondition, dtoSample);
+        return dao.count(searchCondition, dtoSample, where);
     }
 
     public List<Person> find(SearchCondition searchCondition, Person sample) {
         searchCondition.setDefaultSort("updateAt");
-        List<Person.Dto> dtoList = dao.find(searchCondition, sample!=null ? sample.toDto() : null);
+        Person.Dto dtoSample = sample!=null ? sample.toDto() : Person.NULL.toDto();
+        String where = baseFind(searchCondition, dtoSample);
+        List<Person.Dto> dtoList = dao.find(searchCondition, dtoSample, where);
         List<Person> result = dtoList.stream().map(e -> e.toBean()).collect(Collectors.toList());
         return result;
+    }
+
+    private String baseFind(SearchCondition searchCondition, Person.Dto sample) {
+        return new BaseSQL() {{
+            if (searchCondition.getK() != null) WHERE("""
+            (name LIKE #{searchCondition.like.k}
+            )""");
+            if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
+            if (sample != null) {
+            }
+        }}.toString();
     }
 
 }

@@ -1,6 +1,7 @@
 package chengweiou.universe.carina.service.room;
 
 
+import chengweiou.universe.blackhole.dao.BaseSQL;
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.model.BasicRestCode;
@@ -56,14 +57,31 @@ public class PersonRoomRelateDio {
         return result.toBean();
     }
     public long count(SearchCondition searchCondition, PersonRoomRelate sample) {
-        return dao.count(searchCondition, sample!=null ? sample.toDto() : null);
+        PersonRoomRelate.Dto dtoSample = sample!=null ? sample.toDto() : PersonRoomRelate.NULL.toDto();
+        String where = baseFind(searchCondition, dtoSample);
+        return dao.count(searchCondition, dtoSample, where);
     }
 
     public List<PersonRoomRelate> find(SearchCondition searchCondition, PersonRoomRelate sample) {
         searchCondition.setDefaultSort("updateAt");
-        List<PersonRoomRelate.Dto> dtoList = dao.find(searchCondition, sample!=null ? sample.toDto() : null);
+        PersonRoomRelate.Dto dtoSample = sample!=null ? sample.toDto() : PersonRoomRelate.NULL.toDto();
+        String where = baseFind(searchCondition, dtoSample);
+        List<PersonRoomRelate.Dto> dtoList = dao.find(searchCondition, dtoSample, where);
         List<PersonRoomRelate> result = dtoList.stream().map(e -> e.toBean()).collect(Collectors.toList());
         return result;
+    }
+
+    private String baseFind(SearchCondition searchCondition, PersonRoomRelate.Dto sample) {
+        return new BaseSQL() {{
+            if (searchCondition.getK() != null) WHERE("""
+                (name LIKE #{searchCondition.like.k}
+                )""");
+            if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
+            if (sample != null) {
+                if (sample.getPersonId() != null) WHERE("personId = #{sample.personId}");
+                if (sample.getRoomId() != null) WHERE("roomId = #{sample.roomId}");
+            }
+        }}.toString();
     }
 
 }
