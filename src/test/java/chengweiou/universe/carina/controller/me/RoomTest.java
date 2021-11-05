@@ -49,8 +49,19 @@ public class RoomTest {
 		String result = mvc.perform(MockMvcRequestBuilders.post("/me/room/" + data.roomList.get(0).getId() + "/leave")
 				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
 		).andReturn().getResponse().getContentAsString();
-		Rest<Boolean> saveRest = Rest.from(result);
-		Assertions.assertEquals(BasicRestCode.OK, saveRest.getCode());
+		Rest<Boolean> rest = Rest.from(result);
+		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());
+	}
+
+	@Test
+	public void findByKey() throws Exception {
+		String result = mvc.perform(MockMvcRequestBuilders.get("/me/room/key")
+				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
+				.param("personIdList", "2")
+		).andReturn().getResponse().getContentAsString();
+		Rest<Room> rest = Rest.from(result, Room.class);
+		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());
+		Assertions.assertEquals(1, rest.getData().getId());
 	}
 
 	@BeforeEach

@@ -46,4 +46,14 @@ public class RoomController {
         service.delete(e);
         return Rest.ok(true);
     }
+
+    @GetMapping("/room/key")
+    public Rest<Room> findByKey(Room e, @RequestHeader("loginAccount") Account loginAccount) throws ParamException {
+        Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
+        Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
+        Valid.check("room.personIdList", e.getPersonIdList()).isNotNull();
+        e.getPersonIdList().add(loginAccount.getPerson().getId());
+        Room indb = service.findByKey(e);
+        return Rest.ok(indb);
+    }
 }

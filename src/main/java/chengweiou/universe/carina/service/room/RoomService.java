@@ -52,6 +52,12 @@ public class RoomService {
         return dio.findById(e);
     }
 
+    public Room findByKey(Room e) {
+        e.setPersonIdList(e.getPersonIdList().stream().distinct().sorted().collect(Collectors.toList()));
+        e.setType(e.getPersonIdList().size()==2 ? RoomType.SOLO : RoomType.GROUP);
+        return dio.findByKey(e);
+    }
+
     public long count(SearchCondition searchCondition) {
         return dio.count(searchCondition, null);
     }
