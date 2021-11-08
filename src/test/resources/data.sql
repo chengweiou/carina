@@ -11,12 +11,12 @@ insert into room(type, personIdListString, createAt, updateAt) values
     ('GROUP', '1,2,3', '2019-01-01T00:00:00', '2019-01-01T00:00:00')
 ;
 
-insert into personRoomRelate(personId, roomId, name, imgsrc, unread, lastMessage, createAt, updateAt) values
-    (1, 1, 'chiu', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
-    (2, 1, 'ou', '', 1, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
-    (1, 2, 'backyard', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
-    (2, 2, 'backyard', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
-    (3, 2, 'backyard', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00')
+insert into personRoomRelate(personId, roomId, name, imgsrc, unread, lastMessage, lastMessageAt, createAt, updateAt) values
+    (1, 1, 'chiu', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
+    (2, 1, 'ou', '', 1, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
+    (1, 2, 'backyard', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
+    (2, 2, 'backyard', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00', '2019-01-01T00:00:00'),
+    (3, 2, 'backyard', '', 0, 'lastmessage 1', '2019-01-01T00:00:00', '2019-01-01T00:00:00', '2019-01-01T00:00:00')
 ;
 
 insert into history(roomId, personId, senderId, type, v, unread, createAt, updateAt) values

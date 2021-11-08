@@ -40,8 +40,8 @@ public class PersonRoomRelateController {
     @PutMapping("/personRoomRelate/{id}")
     public Rest<Boolean> update(PersonRoomRelate e) throws ParamException {
         Valid.check("personRoomRelate.id", e.getId()).is().positive();
-        Valid.check("personRoomRelate.person | room | name | imgsrc | unread | lastMessage",
-                e.getPerson(), e.getRoom(), e.getName(), e.getImgsrc(), e.getUnread(), e.getLastMessage()).are().notAllNull();
+        Valid.check("personRoomRelate.person | room | name | imgsrc | unread | lastMessage | lastMessageAt",
+                e.getPerson(), e.getRoom(), e.getName(), e.getImgsrc(), e.getUnread(), e.getLastMessage(), e.getLastMessageAt()).are().notAllNull();
         boolean success = service.update(e) == 1;
         return Rest.ok(success);
     }

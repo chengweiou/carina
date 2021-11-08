@@ -30,6 +30,7 @@ CREATE TABLE personRoomRelate (
     imgsrc character varying NOT NULL,
     unread integer NOT NULL,
     lastMessage text NOT NULL,
+    lastMessageAt timestamp without time zone  NOT NULL,
     createAt timestamp without time zone NOT NULL,
     updateAt timestamp without time zone NOT NULL,
     PRIMARY KEY (id)
