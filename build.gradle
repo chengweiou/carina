@@ -16,7 +16,6 @@ configurations {
 
 repositories {
 	maven {
-		name = 'GitHubPackages'
 		url = uri('https://maven.pkg.github.com/chengweiou/blackhole')
 		credentials {
 			username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
@@ -28,11 +27,11 @@ repositories {
 
 dependencies {
 
-	implementation 'com.auth0:java-jwt:3.10.1'
+	implementation 'com.auth0:java-jwt:3.18.2'
 	implementation 'org.bouncycastle:bcprov-jdk15on:1.69'
 	implementation 'eu.bitwalker:UserAgentUtils:1.21'
 
-	implementation 'chengweiou.universe:blackhole:0.0.43'
+	implementation 'chengweiou.universe:blackhole:0.0.44'
 	implementation 'com.google.code.gson:gson:2.8.9'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 	// for log4j2 yml

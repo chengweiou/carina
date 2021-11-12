@@ -1,6 +1,6 @@
 package chengweiou.universe.carina.model.entity.room;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.springframework.beans.BeanUtils;
 
@@ -24,13 +24,13 @@ public class PersonRoomRelate extends ServiceEntity {
     private String imgsrc;
     private Integer unread;
     private String lastMessage;
-    private LocalDateTime lastMessageAt;
+    private Instant lastMessageAt;
 
     public void fillNotRequire() {
         imgsrc = imgsrc!=null ? imgsrc : "";
         unread = unread!=null ? unread : 0;
         lastMessage = lastMessage!=null ? lastMessage : "";
-        lastMessageAt = lastMessageAt!=null ? lastMessageAt : LocalDateTime.now();
+        lastMessageAt = lastMessageAt!=null ? lastMessageAt : Instant.now();
     }
 
     public void fixLastMessage() {
@@ -61,7 +61,7 @@ public class PersonRoomRelate extends ServiceEntity {
         private String imgsrc;
         private Integer unread;
         private String lastMessage;
-        private LocalDateTime lastMessageAt;
+        private Instant lastMessageAt;
         public PersonRoomRelate toBean() {
             PersonRoomRelate result = new PersonRoomRelate();
             BeanUtils.copyProperties(this, result);

@@ -3,8 +3,7 @@ package chengweiou.universe.carina.base.jwt;
 import java.io.IOException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -37,7 +36,7 @@ public class JwtUtil {
     }
     private String sign(Account account, Algorithm algorithm) {
         try {
-            Date expiresAt = Date.from(LocalDateTime.now(ZoneId.of("UTC")).plus(config.getExpMinute(), ChronoUnit.MINUTES).atZone(ZoneId.of("UTC")).toInstant());
+            Date expiresAt = Date.from(Instant.now().plus(config.getExpMinute(), ChronoUnit.MINUTES));
             return JWT.create()
                 .withIssuer(config.getIssuer())
                 .withClaim("personId", account.getPerson().getId())
@@ -71,7 +70,7 @@ public class JwtUtil {
             throw new UnauthException();
         }
     }
-    
+
     public Account decode(String token) throws UnauthException {
         if (token == null) throw new UnauthException();
         DecodedJWT jwt = JWT.decode(token);

@@ -1,6 +1,7 @@
 package chengweiou.universe.carina.base;
 
 
+import chengweiou.universe.carina.base.formatter.InstantFormatter;
 import chengweiou.universe.carina.base.formatter.LocalDateFormatter;
 import chengweiou.universe.carina.base.formatter.LocalDateTimeFormatter;
 import chengweiou.universe.carina.interceptor.AuthInterceptorMe;
@@ -23,6 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new LocalDateFormatter());
         registry.addFormatter(new LocalDateTimeFormatter());
+        registry.addFormatter(new InstantFormatter());
     }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

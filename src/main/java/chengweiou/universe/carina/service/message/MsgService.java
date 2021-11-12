@@ -21,7 +21,7 @@ import chengweiou.universe.carina.service.room.RoomDio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +84,7 @@ public class MsgService {
         e.fillNotRequire();
         PersonRoomRelate relate = personRoomRelateDio.findByKey(Builder.set("room", e.getRoom()).set("person", e.getPerson()).to(new PersonRoomRelate()));
         relate.setLastMessage(getMessageByType(e));
-        relate.setLastMessageAt(LocalDateTime.now());
+        relate.setLastMessageAt(Instant.now());
         personRoomRelateTask.update(relate);
     }
 
@@ -97,7 +97,7 @@ public class MsgService {
         PersonRoomRelate relate = personRoomRelateDio.findByKey(Builder.set("room", e.getRoom()).set("person", e.getPerson()).to(new PersonRoomRelate()));
         relate.setUnread(relate.getUnread() + 1);
         relate.setLastMessage(getMessageByType(e));
-        relate.setLastMessageAt(LocalDateTime.now());
+        relate.setLastMessageAt(Instant.now());
         personRoomRelateTask.update(relate);
     }
 
