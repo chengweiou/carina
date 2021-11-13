@@ -23,7 +23,7 @@ public class PersonRoomRelateController {
     @Autowired
     private PersonRoomRelateService service;
 
-    @GetMapping("/personRoomRelate/room/{room.id}")
+    @GetMapping("/personRoomRelate/key")
     public Rest<PersonRoomRelate> findByKey(PersonRoomRelate e, @RequestHeader("loginAccount") Account loginAccount) throws ParamException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
