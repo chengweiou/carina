@@ -35,8 +35,9 @@ public class PersonRoomRelateTest {
 
 	@Test
 	public void findByKey() throws Exception {
-		String result = mvc.perform(MockMvcRequestBuilders.get("/me/personRoomRelate/room/" + data.roomList.get(0).getId())
+		String result = mvc.perform(MockMvcRequestBuilders.get("/me/personRoomRelate/key")
 				.header("loginAccount", GsonUtil.create().toJson(loginAccount))
+				.param("room.id", data.roomList.get(0).getId().toString())
 		).andReturn().getResponse().getContentAsString();
 		Rest<PersonRoomRelate> rest = Rest.from(result, PersonRoomRelate.class);
 		Assertions.assertEquals(BasicRestCode.OK, rest.getCode());
