@@ -52,6 +52,11 @@ public class RoomService {
         return dio.findById(e);
     }
 
+    /**
+     * 同 findById， 不创建新房间
+     * @param e
+     * @return
+     */
     public Room findByKey(Room e) {
         e.setPersonIdList(e.getPersonIdList().stream().distinct().sorted().collect(Collectors.toList()));
         e.setType(e.getPersonIdList().size()==2 ? RoomType.SOLO : RoomType.GROUP);

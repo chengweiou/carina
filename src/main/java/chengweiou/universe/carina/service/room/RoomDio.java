@@ -13,6 +13,7 @@ import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.model.BasicRestCode;
 import chengweiou.universe.carina.dao.room.RoomDao;
 import chengweiou.universe.carina.model.SearchCondition;
+import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
 import chengweiou.universe.carina.model.entity.room.Room;
 
 
@@ -71,13 +72,24 @@ public class RoomDio {
         return result;
     }
 
+    public List<Room> findId(SearchCondition searchCondition, Room sample) {
+        searchCondition.setDefaultSort("updateAt");
+        Room.Dto dtoSample = sample!=null ? sample.toDto() : Room.NULL.toDto();
+        String where = baseFind(searchCondition, dtoSample);
+        List<Room.Dto> dtoList = dao.findId(searchCondition, dtoSample, where);
+        List<Room> result = dtoList.stream().map(e -> e.toBean()).collect(Collectors.toList());
+        return result;
+    }
+
     private String baseFind(SearchCondition searchCondition, Room.Dto sample) {
         return new BaseSQL() {{
             if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
             if (sample != null) {
-                if (sample.getType() != null) WHERE("type = (${sample.type})");
+                if (sample.getType() != null) WHERE("type = #{sample.type}");
                 if (sample.getPersonIdListString() != null) WHERE("personIdListString in (${sample.personIdListString})");
             }
         }}.toString();
     }
+
+
 }

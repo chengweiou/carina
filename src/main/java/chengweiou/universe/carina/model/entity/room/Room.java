@@ -46,7 +46,8 @@ public class Room extends ServiceEntity {
         public Room toBean() {
             Room result = new Room();
             BeanUtils.copyProperties(this, result);
-            result.setPersonIdList(Pattern.compile(",").splitAsStream(personIdListString).map(Long::valueOf).collect(Collectors.toList()));
+            // 只查询id的情况下
+            if (result.getPersonIdList() != null) result.setPersonIdList(Pattern.compile(",").splitAsStream(personIdListString).map(Long::valueOf).collect(Collectors.toList()));
             return result;
         }
     }

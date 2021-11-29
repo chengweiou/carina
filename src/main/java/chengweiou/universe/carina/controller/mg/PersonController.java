@@ -9,6 +9,8 @@ import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.service.person.PersonService;
+import chengweiou.universe.carina.service.room.PersonRoomRelateTask;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,8 @@ import java.util.List;
 public class PersonController {
     @Autowired
     private PersonService service;
+    @Autowired
+    private PersonRoomRelateTask personRoomRelateTask;
 
     @PostMapping("/person")
     public Rest<Long> save(Person e) throws ParamException, FailException, ProjException {
@@ -39,6 +43,9 @@ public class PersonController {
         Valid.check("person.id", e.getId()).is().positive();
         Valid.check("person.name | imgsrc | unread", e.getName(), e.getImgsrc(), e.getUnread()).are().notAllNull();
         boolean success = service.update(e) == 1;
+        if (success) {
+            if (e.getName() != null || e.getImgsrc() != null) personRoomRelateTask.updateSoloOtherByPerson(e);
+        }
         return Rest.ok(success);
     }
 

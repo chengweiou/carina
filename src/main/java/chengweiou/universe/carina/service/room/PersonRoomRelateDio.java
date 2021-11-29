@@ -43,6 +43,11 @@ public class PersonRoomRelateDio {
         return dao.update(e.toDto());
     }
 
+    public long updateByOtherPerson(PersonRoomRelate e, SearchCondition roomIdSearchCondition) {
+        e.updateAt();
+        return dao.updateByOtherPerson(e.toDto(), roomIdSearchCondition);
+    }
+
     public PersonRoomRelate findById(PersonRoomRelate e) {
         PersonRoomRelate.Dto result = dao.findById(e.toDto());
         if (result == null) return PersonRoomRelate.NULL;
@@ -71,6 +76,14 @@ public class PersonRoomRelateDio {
         return result;
     }
 
+    public List<PersonRoomRelate> findRoomId(SearchCondition searchCondition, PersonRoomRelate sample) {
+        searchCondition.setDefaultSort("updateAt");
+        PersonRoomRelate.Dto dtoSample = sample!=null ? sample.toDto() : PersonRoomRelate.NULL.toDto();
+        List<PersonRoomRelate.Dto> dtoList = dao.findRoomId(searchCondition, dtoSample);
+        List<PersonRoomRelate> result = dtoList.stream().map(e -> e.toBean()).collect(Collectors.toList());
+        return result;
+    }
+
     private String baseFind(SearchCondition searchCondition, PersonRoomRelate.Dto sample) {
         return new BaseSQL() {{
             if (searchCondition.getK() != null) WHERE("""
@@ -83,5 +96,6 @@ public class PersonRoomRelateDio {
             }
         }}.toString();
     }
+
 
 }

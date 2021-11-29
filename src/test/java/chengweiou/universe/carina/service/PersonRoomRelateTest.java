@@ -5,6 +5,7 @@ import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.carina.data.Data;
 import chengweiou.universe.carina.model.SearchCondition;
+import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
 import chengweiou.universe.carina.service.room.PersonRoomRelateService;
 import chengweiou.universe.carina.service.room.PersonRoomRelateTask;
@@ -59,6 +60,16 @@ public class PersonRoomRelateTest {
 		Assertions.assertEquals(20, indb.getUnread());
 		Builder.set("unread", old).to(e);
 		service.update(e);
+	}
+
+	@Test
+	public void updateTaskOtherByPersonNameChange() throws ExecutionException, InterruptedException {
+		Person e = Builder.set("id", data.personList.get(0).getId()).set("name", "task change name").to(new Person());
+		Future<Long> count = task.updateSoloOtherByPerson(e);
+		Assertions.assertEquals(1, count.get());
+		PersonRoomRelate indb = service.findById(data.personRoomRelateList.get(1));
+		Assertions.assertEquals("task change name", indb.getName());
+		service.update(data.personRoomRelateList.get(1));
 	}
 
 	@Test
