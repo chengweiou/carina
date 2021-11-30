@@ -43,6 +43,7 @@ public interface PersonRoomRelateDao extends BaseDao<Dto> {
                 FROM("personRoomRelate");
                 if (sample != null) {
                     if (sample.getPersonId() != null) WHERE("personId = #{sample.personId}");
+                    if (sample.getStatus() != null) WHERE("status = #{sample.status}");
                 }
             }};
         }

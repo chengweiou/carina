@@ -10,6 +10,7 @@ import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
+import chengweiou.universe.carina.model.entity.room.PersonRoomRelateStatus;
 import chengweiou.universe.carina.model.entity.room.Room;
 import chengweiou.universe.carina.service.history.HistoryDio;
 import chengweiou.universe.carina.service.history.HistoryTask;
@@ -85,6 +86,7 @@ public class MsgService {
         PersonRoomRelate relate = personRoomRelateDio.findByKey(Builder.set("room", e.getRoom()).set("person", e.getPerson()).to(new PersonRoomRelate()));
         relate.setLastMessage(getMessageByType(e));
         relate.setLastMessageAt(Instant.now());
+        relate.setStatus(PersonRoomRelateStatus.SHOW);
         personRoomRelateTask.update(relate);
     }
 
@@ -98,6 +100,7 @@ public class MsgService {
         relate.setUnread(relate.getUnread() + 1);
         relate.setLastMessage(getMessageByType(e));
         relate.setLastMessageAt(Instant.now());
+        relate.setStatus(PersonRoomRelateStatus.SHOW);
         personRoomRelateTask.update(relate);
     }
 
@@ -118,7 +121,7 @@ public class MsgService {
      */
     public void readById(History e) throws FailException {
         History indb = historyDio.findById(e);
-        if (e.getPerson().getId() != indb.getPerson().getId()) throw new FailException("尝试清理不属于自己的消息" + e);
+        if (e.getPerson().getId() != indb.getPerson().getId()) throw new FailException(e.getPerson().getId() + "尝试清理属于" + indb.getPerson().getId()+ "的消息" + e);
         if ( ! indb.getUnread()) return;
         if (config.getServerHistory()) {
             // 服务端保存，则 本消息 更新已读

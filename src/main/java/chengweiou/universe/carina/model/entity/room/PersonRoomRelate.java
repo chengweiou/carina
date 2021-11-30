@@ -25,12 +25,14 @@ public class PersonRoomRelate extends ServiceEntity {
     private Integer unread;
     private String lastMessage;
     private Instant lastMessageAt;
+    private PersonRoomRelateStatus status; // 默认创建隐藏，发消息后显示
 
     public void fillNotRequire() {
         imgsrc = imgsrc!=null ? imgsrc : "";
         unread = unread!=null ? unread : 0;
         lastMessage = lastMessage!=null ? lastMessage : "";
         lastMessageAt = lastMessageAt!=null ? lastMessageAt : Instant.now();
+        status =  status!=null ? status : PersonRoomRelateStatus.HIDE;
     }
 
     public void fixLastMessage() {
@@ -62,6 +64,7 @@ public class PersonRoomRelate extends ServiceEntity {
         private Integer unread;
         private String lastMessage;
         private Instant lastMessageAt;
+        private PersonRoomRelateStatus status; // 默认创建隐藏，发消息后显示
         public PersonRoomRelate toBean() {
             PersonRoomRelate result = new PersonRoomRelate();
             BeanUtils.copyProperties(this, result);

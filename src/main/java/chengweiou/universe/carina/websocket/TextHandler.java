@@ -45,12 +45,12 @@ public class TextHandler extends TextWebSocketHandler {
         switch (getDeviceType(session)) {
             case COMPUTER: {
                 // 切换设备
-                if (PC_SESSION_MAP.containsKey(person.getId())) PC_SESSION_MAP.get(person.getId()).close();
+                if (PC_SESSION_MAP.containsKey(person.getId())) PC_SESSION_MAP.get(person.getId()).close(new CloseStatus(4001, "多点登陆, 被踢下线"));
                 PC_SESSION_MAP.put(person.getId(), session);
                 break;
             }
             default: {
-                if (PHONE_SESSION_MAP.containsKey(person.getId())) PHONE_SESSION_MAP.get(person.getId()).close();
+                if (PHONE_SESSION_MAP.containsKey(person.getId())) PHONE_SESSION_MAP.get(person.getId()).close(new CloseStatus(4001, "多点登陆, 被踢下线"));
                 PHONE_SESSION_MAP.put(person.getId(), session);
             }
 
@@ -61,6 +61,7 @@ public class TextHandler extends TextWebSocketHandler {
     // todo exception projexception...
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+
         if (message.getPayloadLength() == 0) {
             session.sendMessage(new TextMessage(""));
             return;

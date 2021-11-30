@@ -8,6 +8,7 @@ import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
+import chengweiou.universe.carina.model.entity.room.PersonRoomRelateStatus;
 import chengweiou.universe.carina.service.room.PersonRoomRelateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,7 @@ public class PersonRoomRelateController {
     public Rest<Long> count(SearchCondition searchCondition, @RequestHeader("loginAccount")Account loginAccount) throws ParamException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
-        long count = service.count(searchCondition, Builder.set("person", loginAccount.getPerson()).to(new PersonRoomRelate()));
+        long count = service.count(searchCondition, Builder.set("person", loginAccount.getPerson()).set("status", PersonRoomRelateStatus.SHOW).to(new PersonRoomRelate()));
         return Rest.ok(count);
     }
 
@@ -45,7 +46,7 @@ public class PersonRoomRelateController {
     public Rest<List<PersonRoomRelate>> find(SearchCondition searchCondition, @RequestHeader("loginAccount")Account loginAccount) throws ParamException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
-        List<PersonRoomRelate> list = service.find(searchCondition, Builder.set("person", loginAccount.getPerson()).to(new PersonRoomRelate()));
+        List<PersonRoomRelate> list = service.find(searchCondition, Builder.set("person", loginAccount.getPerson()).set("status", PersonRoomRelateStatus.SHOW).to(new PersonRoomRelate()));
         return Rest.ok(list);
     }
 }

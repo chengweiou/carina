@@ -93,6 +93,7 @@ public class PersonRoomRelateDio {
             if (sample != null) {
                 if (sample.getPersonId() != null) WHERE("personId = #{sample.personId}");
                 if (sample.getRoomId() != null) WHERE("roomId = #{sample.roomId}");
+                if (sample.getStatus() != null) WHERE("status = #{sample.status}");
             }
         }}.toString();
     }

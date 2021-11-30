@@ -31,6 +31,7 @@ CREATE TABLE personRoomRelate (
     unread integer NOT NULL,
     lastMessage text NOT NULL,
     lastMessageAt timestamp with time zone  NOT NULL,
+    status text NOT NULL,
     createAt timestamp with time zone NOT NULL,
     updateAt timestamp with time zone NOT NULL,
     PRIMARY KEY (id)
