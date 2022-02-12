@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("mgPersonRoomRelateController")
+@RestController
 @RequestMapping("mg")
-public class PersonRoomRelateController {
+public class PersonRoomRelateControllerMg {
     @Autowired
     private PersonRoomRelateService service;
     @Autowired

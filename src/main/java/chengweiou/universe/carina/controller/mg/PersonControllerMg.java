@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("mgPersonController")
+@RestController
 @RequestMapping("mg")
-public class PersonController {
+public class PersonControllerMg {
     @Autowired
     private PersonService service;
     @Autowired

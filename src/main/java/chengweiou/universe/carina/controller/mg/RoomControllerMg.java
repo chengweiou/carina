@@ -20,9 +20,9 @@ import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.room.Room;
 import chengweiou.universe.carina.service.room.RoomDio;
 
-@RestController("mgRoomController")
+@RestController
 @RequestMapping("mg")
-public class RoomController {
+public class RoomControllerMg {
     @Autowired
     private RoomDio dio;
 

@@ -20,9 +20,9 @@ import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.service.history.HistoryDio;
 
-@RestController("mgHistoryController")
+@RestController
 @RequestMapping("mg")
-public class HistoryController {
+public class HistoryControllerMg {
     @Autowired
     private HistoryDio dio;
 
