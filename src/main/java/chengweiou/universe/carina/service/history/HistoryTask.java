@@ -1,5 +1,6 @@
 package chengweiou.universe.carina.service.history;
 
+import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.carina.model.entity.history.History;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -12,11 +13,11 @@ import java.util.concurrent.Future;
 @Service
 public class HistoryTask {
     @Autowired
-    private HistoryService service;
+    private HistoryDio dio;
 
     @Async
-    public Future<Long> delete(List<History> list) {
-        long count = service.delete(list);
-        return new AsyncResult<>(count);
+    public Future<Long> delete(List<History> list) throws FailException {
+        dio.deleteByIdList(list);
+        return new AsyncResult<>(1L);
     }
 }

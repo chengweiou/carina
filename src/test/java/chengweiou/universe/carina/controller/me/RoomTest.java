@@ -20,7 +20,6 @@ import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.data.Data;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.model.entity.room.Room;
-import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -31,8 +30,6 @@ public class RoomTest {
 	@Autowired
 	private Data data;
 	private Account loginAccount;
-	@Autowired
-	private PersonRoomRelateDio personRoomRelateDio;
 
 	@Test
 	public void enterRoom() throws Exception {

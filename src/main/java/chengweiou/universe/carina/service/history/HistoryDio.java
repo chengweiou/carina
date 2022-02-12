@@ -1,83 +1,32 @@
 package chengweiou.universe.carina.service.history;
 
 
-import chengweiou.universe.blackhole.dao.BaseSQL;
-import chengweiou.universe.blackhole.exception.FailException;
-import chengweiou.universe.blackhole.model.Builder;
-import chengweiou.universe.blackhole.util.LogUtil;
-import chengweiou.universe.carina.model.SearchCondition;
-import chengweiou.universe.carina.model.entity.history.History;
-import chengweiou.universe.carina.dao.history.HistoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import chengweiou.universe.blackhole.dao.BaseDio;
+import chengweiou.universe.blackhole.dao.BaseSQL;
+import chengweiou.universe.blackhole.model.AbstractSearchCondition;
+import chengweiou.universe.carina.dao.history.HistoryDao;
+import chengweiou.universe.carina.model.SearchCondition;
+import chengweiou.universe.carina.model.entity.history.History;
+import chengweiou.universe.carina.model.entity.history.History.Dto;
 
 @Component
-public class HistoryDio {
+public class HistoryDio extends BaseDio<History, Dto> {
     @Autowired
     private HistoryDao dao;
-
-    public void save(History e) throws FailException {
-        e.fillNotRequire();
-        e.fillNotRequire();
-        e.createAt();
-        e.updateAt();
-        History.Dto dto = e.toDto();
-        long count = dao.save(dto);
-        if (count != 1) throw new FailException();
-        e.setId(dto.getId());
-    }
-
-    public void delete(History e) throws FailException {
-        long count = dao.delete(e.toDto());
-        if (count != 1) throw new FailException();
-    }
-
-    public long delete(List<History> list) {
-        SearchCondition searchCondition = Builder.set("idList", list.stream().map(e -> e.getId().toString()).collect(Collectors.toList())).to(new SearchCondition());
-        long count = dao.deleteMulti(searchCondition.getForeachIdList());
-        if (count != list.size()) LogUtil.i("delete multi history total:" + list.size() + " success: " + count + ". idList=" + searchCondition.getIdList());
-        return count;
-    }
-
-    public long update(History e) {
-        e.updateAt();
-        return dao.update(e.toDto());
-    }
-
-    public long updateUnreadByRoomAndPerson(History e) {
-        e.updateAt();
-        return dao.updateByRoomAndPerson(e.toDto());
-    }
-
-    public History findById(History e) {
-        History.Dto result = dao.findById(e.toDto());
-        if (result == null) return History.NULL;
-        return result.toBean();
-    }
-
-    public long count(SearchCondition searchCondition, History sample) {
-        History.Dto dtoSample = sample!=null ? sample.toDto() : History.NULL.toDto();
-        String where = baseFind(searchCondition, dtoSample);
-        return dao.count(searchCondition, dtoSample, where);
-    }
-
-    public List<History> find(SearchCondition searchCondition, History sample) {
-        searchCondition.setDefaultSort("updateAt");
-        History.Dto dtoSample = sample!=null ? sample.toDto() : History.NULL.toDto();
-        String where = baseFind(searchCondition, dtoSample);
-        List<History.Dto> dtoList = dao.find(searchCondition, dtoSample, where);
-        List<History> result = dtoList.stream().map(e -> e.toBean()).collect(Collectors.toList());
-        return result;
-    }
-
-    private String baseFind(SearchCondition searchCondition, History.Dto sample) {
+    @Override
+    protected HistoryDao getDao() { return dao; }
+    @Override
+    protected Class getTClass() { return History.class; };
+    @Override
+    protected String getDefaultSort() { return "updateAt"; };
+    @Override
+    protected String baseFind(AbstractSearchCondition searchCondition, Dto sample) {
         return new BaseSQL() {{
             if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");
-            if (searchCondition.getMaxId() != null) WHERE("id < #{searchCondition.maxId}");
+            if (((SearchCondition) searchCondition).getMaxId() != null) WHERE("id < #{searchCondition.maxId}");
             if (sample != null) {
                 if (sample.getPersonId() != null) WHERE("personId = #{sample.personId}");
                 if (sample.getSenderId() != null) WHERE("senderId = #{sample.senderId}");
@@ -85,5 +34,10 @@ public class HistoryDio {
                 if (sample.getUnread() != null) WHERE("unread = #{sample.unread}");
             }
         }}.toString();
+    }
+
+    public long updateUnreadByRoomAndPerson(History e) {
+        e.updateAt();
+        return dao.updateByRoomAndPerson(e.toDto());
     }
 }

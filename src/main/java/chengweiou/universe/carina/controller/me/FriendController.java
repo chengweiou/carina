@@ -10,6 +10,7 @@ import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.friend.Friend;
+import chengweiou.universe.carina.service.friend.FriendDio;
 import chengweiou.universe.carina.service.friend.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ import java.util.List;
 public class FriendController {
     @Autowired
     private FriendService service;
+    @Autowired
+    private FriendDio dio;
 
     @PostMapping("/friend")
     public Rest<Long> save(Friend e, @RequestHeader("loginAccount") Account loginAccount) throws ParamException, FailException, ProjException {
@@ -38,7 +41,7 @@ public class FriendController {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
         Valid.check("friend.id", e.getId()).is().positive();
-        service.delete(e);
+        dio.delete(e);
         return Rest.ok(true);
     }
 
@@ -47,7 +50,7 @@ public class FriendController {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
         Valid.check("friend.id", e.getId()).is().positive();
-        Friend indb = service.findById(e);
+        Friend indb = dio.findById(e);
         return Rest.ok(indb);
     }
     @GetMapping("/friend/check")
@@ -57,7 +60,7 @@ public class FriendController {
         Valid.check("friend.target", e.getTarget()).isNotNull();
         Valid.check("friend.target.id", e.getTarget().getId()).is().positive();
         e.setPerson(loginAccount.getPerson());
-        long count = service.countByKey(e);
+        long count = dio.countByKey(e);
         return Rest.ok(count == 1);
     }
 
@@ -65,7 +68,7 @@ public class FriendController {
     public Rest<Long> count(SearchCondition searchCondition, @RequestHeader("loginAccount") Account loginAccount) throws ParamException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
-        long count = service.count(searchCondition, Builder.set("person", loginAccount.getPerson()).to(new Friend()));
+        long count = dio.count(searchCondition, Builder.set("person", loginAccount.getPerson()).to(new Friend()));
         return Rest.ok(count);
     }
 
@@ -73,7 +76,7 @@ public class FriendController {
     public Rest<List<Friend>> find(SearchCondition searchCondition, @RequestHeader("loginAccount") Account loginAccount) throws ParamException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
-        List<Friend> list = service.find(searchCondition, Builder.set("person", loginAccount.getPerson()).to(new Friend()));
+        List<Friend> list = dio.find(searchCondition, Builder.set("person", loginAccount.getPerson()).to(new Friend()));
         return Rest.ok(list);
     }
 }

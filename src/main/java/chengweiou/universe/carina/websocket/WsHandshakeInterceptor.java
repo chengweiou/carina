@@ -1,10 +1,6 @@
 package chengweiou.universe.carina.websocket;
 
-import chengweiou.universe.blackhole.exception.UnauthException;
-import chengweiou.universe.blackhole.util.LogUtil;
-import chengweiou.universe.carina.base.converter.Account;
-import chengweiou.universe.carina.base.jwt.JwtUtil;
-import chengweiou.universe.carina.service.person.PersonService;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +10,11 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import java.util.Map;
+import chengweiou.universe.blackhole.exception.UnauthException;
+import chengweiou.universe.blackhole.util.LogUtil;
+import chengweiou.universe.carina.base.converter.Account;
+import chengweiou.universe.carina.base.jwt.JwtUtil;
+import chengweiou.universe.carina.service.person.PersonDio;
 
 @Configuration
 @EnableWebSocket
@@ -22,7 +22,7 @@ public class WsHandshakeInterceptor implements HandshakeInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private PersonService personService;
+    private PersonDio personDio;
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         String path = request.getURI().getPath();
@@ -31,7 +31,7 @@ public class WsHandshakeInterceptor implements HandshakeInterceptor {
         try {
             Account account = jwtUtil.verify(token);
             // tip: 推送消息的时候要名字
-            attributes.put("user", personService.findById(account.getPerson()));
+            attributes.put("user", personDio.findById(account.getPerson()));
         } catch (UnauthException ex) {
             LogUtil.i("ws handshake fail: token: " + token);
             return false;

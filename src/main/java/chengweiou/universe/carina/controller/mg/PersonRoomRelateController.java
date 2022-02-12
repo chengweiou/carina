@@ -8,6 +8,7 @@ import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
+import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
 import chengweiou.universe.carina.service.room.PersonRoomRelateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,8 @@ import java.util.List;
 public class PersonRoomRelateController {
     @Autowired
     private PersonRoomRelateService service;
+    @Autowired
+    private PersonRoomRelateDio dio;
 
     @PostMapping("/personRoomRelate")
     public Rest<Long> save(PersonRoomRelate e) throws ParamException, FailException, ProjException {
@@ -34,7 +37,7 @@ public class PersonRoomRelateController {
     @DeleteMapping("/personRoomRelate/{id}")
     public Rest<Boolean> delete(PersonRoomRelate e) throws ParamException, FailException {
         Valid.check("personRoomRelate.id", e.getId()).is().positive();
-        service.delete(e);
+        dio.delete(e);
         return Rest.ok(true);
     }
     @PutMapping("/personRoomRelate/{id}")
@@ -42,26 +45,26 @@ public class PersonRoomRelateController {
         Valid.check("personRoomRelate.id", e.getId()).is().positive();
         Valid.check("personRoomRelate.person | room | name | imgsrc | unread | lastMessage | lastMessageAt",
                 e.getPerson(), e.getRoom(), e.getName(), e.getImgsrc(), e.getUnread(), e.getLastMessage(), e.getLastMessageAt()).are().notAllNull();
-        boolean success = service.update(e) == 1;
+        boolean success = dio.update(e) == 1;
         return Rest.ok(success);
     }
 
     @GetMapping("/personRoomRelate/{id}")
     public Rest<PersonRoomRelate> findById(PersonRoomRelate e) throws ParamException {
         Valid.check("personRoomRelate.id", e.getId()).is().positive();
-        PersonRoomRelate indb = service.findById(e);
+        PersonRoomRelate indb = dio.findById(e);
         return Rest.ok(indb);
     }
 
     @GetMapping("/personRoomRelate/count")
     public Rest<Long> count(SearchCondition searchCondition) {
-        long count = service.count(searchCondition);
+        long count = dio.count(searchCondition, null);
         return Rest.ok(count);
     }
 
     @GetMapping("/personRoomRelate")
     public Rest<List<PersonRoomRelate>> find(SearchCondition searchCondition) {
-        List<PersonRoomRelate> list = service.find(searchCondition);
+        List<PersonRoomRelate> list = dio.find(searchCondition, null);
         return Rest.ok(list);
     }
 }

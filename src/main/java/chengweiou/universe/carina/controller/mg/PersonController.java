@@ -8,6 +8,7 @@ import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.person.Person;
+import chengweiou.universe.carina.service.person.PersonDio;
 import chengweiou.universe.carina.service.person.PersonService;
 import chengweiou.universe.carina.service.room.PersonRoomRelateTask;
 
@@ -22,6 +23,8 @@ public class PersonController {
     @Autowired
     private PersonService service;
     @Autowired
+    private PersonDio dio;
+    @Autowired
     private PersonRoomRelateTask personRoomRelateTask;
 
     @PostMapping("/person")
@@ -35,14 +38,14 @@ public class PersonController {
     @DeleteMapping("/person/{id}")
     public Rest<Boolean> delete(Person e) throws ParamException, FailException {
         Valid.check("person.id", e.getId()).is().positive();
-        service.delete(e);
+        dio.delete(e);
         return Rest.ok(true);
     }
     @PutMapping("/person/{id}")
     public Rest<Boolean> update(Person e) throws ParamException {
         Valid.check("person.id", e.getId()).is().positive();
         Valid.check("person.name | imgsrc | unread", e.getName(), e.getImgsrc(), e.getUnread()).are().notAllNull();
-        boolean success = service.update(e) == 1;
+        boolean success = dio.update(e) == 1;
         if (success) {
             if (e.getName() != null || e.getImgsrc() != null) personRoomRelateTask.updateSoloOtherByPerson(e);
         }
@@ -52,19 +55,19 @@ public class PersonController {
     @GetMapping("/person/{id}")
     public Rest<Person> findById(Person e) throws ParamException {
         Valid.check("person.id", e.getId()).is().positive();
-        Person indb = service.findById(e);
+        Person indb = dio.findById(e);
         return Rest.ok(indb);
     }
 
     @GetMapping("/person/count")
     public Rest<Long> count(SearchCondition searchCondition) {
-        long count = service.count(searchCondition);
+        long count = dio.count(searchCondition, null);
         return Rest.ok(count);
     }
 
     @GetMapping("/person")
     public Rest<List<Person>> find(SearchCondition searchCondition) {
-        List<Person> list = service.find(searchCondition);
+        List<Person> list = dio.find(searchCondition, null);
         return Rest.ok(list);
     }
 }

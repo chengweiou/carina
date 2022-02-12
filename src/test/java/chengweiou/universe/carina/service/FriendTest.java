@@ -16,6 +16,7 @@ import chengweiou.universe.carina.data.Data;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.friend.Friend;
 import chengweiou.universe.carina.model.entity.person.Person;
+import chengweiou.universe.carina.service.friend.FriendDio;
 import chengweiou.universe.carina.service.friend.FriendService;
 
 @SpringBootTest
@@ -24,26 +25,28 @@ public class FriendTest {
 	@Autowired
 	private FriendService service;
 	@Autowired
+	private FriendDio dio;
+	@Autowired
 	private Data data;
 
 	@Test
 	public void saveDelete() throws FailException, ProjException {
 		Friend e = Builder.set("person", data.personList.get(1)).set("target", data.personList.get(2)).to(new Friend());
-		service.save(e);
+		dio.save(e);
 		Assertions.assertEquals(true, e.getId()> 0);
-		service.delete(e);
+		dio.delete(e);
 	}
 
 	@Test
 	public void update() {
 		Person old = data.friendList.get(0).getTarget();
 		Friend e = Builder.set("id", data.friendList.get(0).getId()).set("target", Builder.set("id", 30).to(new Person())).to(new Friend());
-		long count = service.update(e);
+		long count = dio.update(e);
 		Assertions.assertEquals(1, count);
-		Friend indb = service.findById(e);
+		Friend indb = dio.findById(e);
 		Assertions.assertEquals(30, indb.getTarget().getId());
 		Builder.set("target", old).to(e);
-		service.update(e);
+		dio.update(e);
 	}
 
 	@Test
@@ -54,26 +57,26 @@ public class FriendTest {
 		service.saveOrUpdate(e2);
 		Assertions.assertEquals(true, e1.getId()> 0);
 		Assertions.assertEquals(e2.getId(), e1.getId());
-		service.delete(e2);
+		dio.delete(e2);
 	}
 
 	@Test
 	public void countByKey() {
-		long count = service.countByKey(data.friendList.get(0));
+		long count = dio.countByKey(data.friendList.get(0));
 		Assertions.assertEquals(1, count);
-		count = service.countByKey(Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend()));
+		count = dio.countByKey(Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend()));
 		Assertions.assertEquals(0, count);
 	}
 
 	@Test
 	public void count() {
-		long count = service.count(new SearchCondition());
+		long count = dio.count(new SearchCondition(), null);
 		Assertions.assertEquals(2, count);
 	}
 
 	@Test
 	public void find() {
-		List<Friend> list = service.find(new SearchCondition());
+		List<Friend> list = dio.find(new SearchCondition(), null);
 		Assertions.assertEquals(2, list.size());
 	}
 

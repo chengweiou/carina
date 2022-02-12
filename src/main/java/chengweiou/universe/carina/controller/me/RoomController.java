@@ -8,6 +8,7 @@ import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.model.entity.room.Room;
+import chengweiou.universe.carina.service.room.RoomDio;
 import chengweiou.universe.carina.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 public class RoomController {
     @Autowired
     private RoomService service;
+    @Autowired
+    private RoomDio dio;
 
     @PostMapping("/room")
     public Rest<Room> enterRoom(Room e, @RequestHeader("loginAccount") Account loginAccount)  throws ParamException, FailException, ProjException {
@@ -32,7 +35,7 @@ public class RoomController {
     }
 
     @PostMapping("/room/{id}/leave")
-    public Rest<Boolean> leaveRoom(Room e, @RequestHeader("loginAccount") Account loginAccount)  throws ParamException {
+    public Rest<Boolean> leaveRoom(Room e, @RequestHeader("loginAccount") Account loginAccount)  throws ParamException, FailException {
         Valid.check("loginAccount.person", loginAccount.getPerson()).isNotNull();
         Valid.check("loginAccount.person.id", loginAccount.getPerson().getId()).is().positive();
         Valid.check("room.id", e.getId()).is().positive();
@@ -43,7 +46,7 @@ public class RoomController {
     @DeleteMapping("/room/{id}")
     public Rest<Boolean> delete(Room e) throws ParamException, FailException {
         Valid.check("room.id", e.getId()).is().positive();
-        service.delete(e);
+        dio.delete(e);
         return Rest.ok(true);
     }
 

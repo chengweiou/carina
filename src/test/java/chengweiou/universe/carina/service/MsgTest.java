@@ -1,5 +1,15 @@
 package chengweiou.universe.carina.service;
 
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.model.Builder;
@@ -14,16 +24,6 @@ import chengweiou.universe.carina.service.message.MsgService;
 import chengweiou.universe.carina.service.person.PersonDio;
 import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
 import chengweiou.universe.carina.service.room.RoomService;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
-import java.util.List;
 
 // test 需要吧service task 变为dio
 @SpringBootTest
@@ -73,7 +73,7 @@ public class MsgTest {
 		personRoomRelateDio.update(data.personRoomRelateList.get(3));
 		personRoomRelateDio.update(data.personRoomRelateList.get(4));
 		list.removeIf(each -> each.getId() == null); // 自己消息没有id，删除
-		historyDio.delete(list);
+		historyDio.deleteByIdList(list);
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public class MsgTest {
 		personRoomRelateDio.update(data.personRoomRelateList.get(2));
 		personRoomRelateDio.update(data.personRoomRelateList.get(3));
 		personRoomRelateDio.update(data.personRoomRelateList.get(4));
-		historyDio.delete(list);
+		historyDio.deleteByIdList(list);
 	}
 
 	@Test
@@ -166,7 +166,7 @@ public class MsgTest {
 		List<History> h1AllList = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(0)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(1, h1AllList.size());
 		Assertions.assertEquals(false, h1AllList.get(0).getUnread());
-		historyDio.delete(h1AllList);
+		historyDio.deleteByIdList(h1AllList);
 
 
 		// 对方 第一次未读，之后已读
@@ -175,10 +175,10 @@ public class MsgTest {
 		Assertions.assertEquals(true, h2List.get(0).getUnread());
 		List<History> h2ListAgain = service.read(new SearchCondition(), data.personList.get(1), data.roomList.get(1));
 		Assertions.assertEquals(0, h2ListAgain.size());
-		historyDio.delete(h2List);
+		historyDio.deleteByIdList(h2List);
 		List<History> h3List = service.read(new SearchCondition(), data.personList.get(2), data.roomList.get(1));
 		Assertions.assertEquals(1, h3List.size());
-		historyDio.delete(h3List);
+		historyDio.deleteByIdList(h3List);
 
 		// 验证数字
 		Person p1 = personDio.findById(data.personList.get(0));
@@ -220,7 +220,7 @@ public class MsgTest {
 		Assertions.assertEquals(1, indbHistoryList.size());
 		Assertions.assertEquals(false, indbHistoryList.get(0).getUnread());
 
-		historyDio.delete(historyList);
+		historyDio.deleteByIdList(historyList);
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));
 		personDio.update(data.personList.get(2));
@@ -281,7 +281,7 @@ public class MsgTest {
 		Assertions.assertEquals(1, h1List.size());
 		Assertions.assertEquals(false, h1List.get(0).getUnread());
 
-		historyDio.delete(historyList);
+		historyDio.deleteByIdList(historyList);
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));
 		personDio.update(data.personList.get(2));

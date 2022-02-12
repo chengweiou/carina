@@ -41,11 +41,10 @@ public class PersonRoomRelateTask {
             );
         List<String> roomIdList = list.stream().map(e -> e.getRoom().getId().toString()).toList();
         // 过滤不是solo的
-        List<Room> roomList = roomDio.findId(
+        List<String> soloRoomIdList = roomDio.findId(
             Builder.set("limit", 0).set("idList", roomIdList).to(new SearchCondition()),
             Builder.set("type", RoomType.SOLO).to(new Room())
             );
-        List<String> soloRoomIdList = roomList.stream().map(e -> e.getId().toString()).toList();
         // 更新剩余房间，并且personid不是被修改的personid
         long count = dio.updateByOtherPerson(
             Builder.set("person", person).set("name", person.getName()).set("imgsrc", person.getImgsrc()).to(new PersonRoomRelate()),
