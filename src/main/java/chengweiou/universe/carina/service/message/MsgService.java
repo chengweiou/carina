@@ -158,7 +158,7 @@ public class MsgService {
             historyDio.updateUnreadByRoomAndPerson(Builder.set("person", person).set("room", room).set("unread", false).to(new History()));
         } else {
             // 客户端保存，则 本房间读取者 删除
-            historyTask.delete(result);
+            historyTask.deleteByList(result);
         }
         // 更新本房间未读量 0
         PersonRoomRelate relate = personRoomRelateDio.findByKey(Builder.set("person", person).set("room", room).to(new PersonRoomRelate()));

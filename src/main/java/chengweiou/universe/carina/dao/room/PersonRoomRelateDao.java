@@ -23,7 +23,7 @@ public interface PersonRoomRelateDao extends BaseDao<Dto> {
     @SelectProvider(type = Sql.class, method = "findRoomId")
     List<Dto> findRoomId(@Param("searchCondition")SearchCondition searchCondition, @Param("sample")Dto sample);
     class Sql {
-        public String updateByOtherPerson(@Param("e")final Dto e, @Param("roomIdSearchCondition")SearchCondition roomIdSearchCondition) {
+        public String updateByOtherPerson(@Param("e")final Dto e, @Param("roomIdSearchCondition")final SearchCondition roomIdSearchCondition) {
             return new SQL() {{
                 UPDATE("personRoomRelate");
                 if (e.getName() != null) SET("name = #{e.name}");

@@ -3,6 +3,7 @@ package chengweiou.universe.carina.data;
 import java.util.Comparator;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -54,7 +55,8 @@ public class Data {
      */
     public void check() {
         long historyCount = historyDio.count(new SearchCondition(), null);
-        assert historyCount == historyList.size();
+        Assertions.assertEquals(historyList.size(), historyCount);
+        // assert historyCount == historyList.size();
     }
 
 }

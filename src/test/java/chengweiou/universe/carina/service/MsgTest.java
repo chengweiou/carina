@@ -73,11 +73,11 @@ public class MsgTest {
 		personRoomRelateDio.update(data.personRoomRelateList.get(3));
 		personRoomRelateDio.update(data.personRoomRelateList.get(4));
 		list.removeIf(each -> each.getId() == null); // 自己消息没有id，删除
-		historyDio.deleteByIdList(list);
+		historyDio.deleteByIdList(list.stream().map(h -> h.getId().toString()).toList());
 	}
 
 	@Test
-	public void readNoServerHistory() throws FailException, ProjException {
+	public void readNoServerHistory() throws FailException, ProjException, InterruptedException {
 		// todo 现在要看这条记录是什么时候进来的2
 		List<History> indbHistoryList1 = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(0, indbHistoryList1.size());
@@ -114,6 +114,8 @@ public class MsgTest {
 		Assertions.assertEquals(0, r1.getUnread());
 		Assertions.assertEquals("service test", r1.getLastMessage());
 
+		Thread.sleep(100);
+
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));
 		personDio.update(data.personList.get(2));
@@ -149,7 +151,7 @@ public class MsgTest {
 		personRoomRelateDio.update(data.personRoomRelateList.get(2));
 		personRoomRelateDio.update(data.personRoomRelateList.get(3));
 		personRoomRelateDio.update(data.personRoomRelateList.get(4));
-		historyDio.deleteByIdList(list);
+		historyDio.deleteByIdList(list.stream().map(h -> h.getId().toString()).toList());
 	}
 
 	@Test
@@ -166,7 +168,7 @@ public class MsgTest {
 		List<History> h1AllList = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(0)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(1, h1AllList.size());
 		Assertions.assertEquals(false, h1AllList.get(0).getUnread());
-		historyDio.deleteByIdList(h1AllList);
+		historyDio.deleteByIdList(h1AllList.stream().map(h -> h.getId().toString()).toList());
 
 
 		// 对方 第一次未读，之后已读
@@ -175,10 +177,10 @@ public class MsgTest {
 		Assertions.assertEquals(true, h2List.get(0).getUnread());
 		List<History> h2ListAgain = service.read(new SearchCondition(), data.personList.get(1), data.roomList.get(1));
 		Assertions.assertEquals(0, h2ListAgain.size());
-		historyDio.deleteByIdList(h2List);
+		historyDio.deleteByIdList(h2List.stream().map(h -> h.getId().toString()).toList());
 		List<History> h3List = service.read(new SearchCondition(), data.personList.get(2), data.roomList.get(1));
 		Assertions.assertEquals(1, h3List.size());
-		historyDio.deleteByIdList(h3List);
+		historyDio.deleteByIdList(h3List.stream().map(h -> h.getId().toString()).toList());
 
 		// 验证数字
 		Person p1 = personDio.findById(data.personList.get(0));
@@ -220,7 +222,7 @@ public class MsgTest {
 		Assertions.assertEquals(1, indbHistoryList.size());
 		Assertions.assertEquals(false, indbHistoryList.get(0).getUnread());
 
-		historyDio.deleteByIdList(historyList);
+		historyDio.deleteByIdList(historyList.stream().map(h -> h.getId().toString()).toList());
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));
 		personDio.update(data.personList.get(2));
@@ -281,7 +283,7 @@ public class MsgTest {
 		Assertions.assertEquals(1, h1List.size());
 		Assertions.assertEquals(false, h1List.get(0).getUnread());
 
-		historyDio.deleteByIdList(historyList);
+		historyDio.deleteByIdList(historyList.stream().map(h -> h.getId().toString()).toList());
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));
 		personDio.update(data.personList.get(2));

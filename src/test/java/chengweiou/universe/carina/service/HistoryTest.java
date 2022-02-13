@@ -46,8 +46,8 @@ public class HistoryTest {
 		dio.save(e1);
 		History e2 = Builder.set("person", data.personList.get(1)).set("sender", data.personList.get(0)).set("room", data.roomList.get(0)).set("v", "service test").to(new History());
 		dio.save(e2);
-		Future<Long> future = task.delete(Arrays.asList(e1, e2));
-		Assertions.assertEquals(2, future.get());
+		Future<Long> future = task.deleteByList(Arrays.asList(e1, e2));
+		Assertions.assertEquals(null, future.get());
 	}
 
 	@Test

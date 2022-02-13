@@ -67,7 +67,7 @@ public class MsgTest {
 		Assertions.assertEquals(0, findRest.getData().size());
 
 		List<History> deleteList = historyDio.find(new SearchCondition(), Builder.set("room", Builder.set("id", 2).to(new Room())).to(new History()));
-		historyDio.deleteByIdList(deleteList);
+		historyDio.deleteByIdList(deleteList.stream().map(h -> h.getId().toString()).toList());
 		personDio.update(data.personList.get(0));
 		personDio.update(data.personList.get(1));
 		personRoomRelateDio.update(data.personRoomRelateList.get(2));

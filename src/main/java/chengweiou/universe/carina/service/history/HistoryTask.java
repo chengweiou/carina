@@ -16,8 +16,8 @@ public class HistoryTask {
     private HistoryDio dio;
 
     @Async
-    public Future<Long> delete(List<History> list) throws FailException {
-        dio.deleteByIdList(list);
-        return new AsyncResult<>(1L);
+    public Future<Long> deleteByList(List<History> list) throws FailException {
+        dio.deleteByIdList(list.stream().map(e -> e.getId().toString()).toList());
+        return new AsyncResult<>(null);
     }
 }

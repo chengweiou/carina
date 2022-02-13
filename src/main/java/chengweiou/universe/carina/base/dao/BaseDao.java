@@ -52,5 +52,5 @@ public interface BaseDao<Dto extends DtoEntity> extends AbstractBaseDao<Dto> {
     List<Dto> find(@Param("searchCondition") AbstractSearchCondition searchCondition, @Param("sample") Dto sample, @Param("where") String where);
 
     @SelectProvider(type = BaseDaoImpl.class, method = "findId")
-    List<Dto> findId(@Param("searchCondition") AbstractSearchCondition searchCondition, @Param("sample") Dto sample, @Param("where") String where);
+    List<String> findId(@Param("searchCondition") AbstractSearchCondition searchCondition, @Param("sample") Dto sample, @Param("where") String where);
 }

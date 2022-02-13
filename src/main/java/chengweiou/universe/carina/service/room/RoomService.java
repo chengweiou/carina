@@ -87,7 +87,7 @@ public class RoomService {
             historyDio.updateUnreadByRoomAndPerson(Builder.set("person", person).set("room", room).set("unread", false).to(new History()));
         } else {
             List<History> list = historyDio.find(Builder.set("limit", 0).to(new SearchCondition()), Builder.set("person", person).set("room", room).to(new History()));
-            historyDio.deleteByIdList(list.stream().map(History::getId).toList());
+            historyDio.deleteByIdList(list.stream().map(e->e.getId().toString()).toList());
         }
         PersonRoomRelate relate = personRoomRelateDio.findByKey(Builder.set("person", person).set("room", room).to(new PersonRoomRelate()));
         relate.setUnread(0);
