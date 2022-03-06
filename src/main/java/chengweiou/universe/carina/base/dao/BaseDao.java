@@ -27,7 +27,7 @@ public interface BaseDao<Dto extends DtoEntity> extends AbstractBaseDao<Dto> {
     @DeleteProvider(type = BaseDaoImpl.class, method = "deleteBySample")
     long deleteBySample(@Param("e") Dto e, @Param("sample") Dto sample);
     @DeleteProvider(type = BaseDaoImpl.class, method = "deleteByIdList")
-    long deleteByIdList(@Param("e") Dto e, @Param("idList") List idList);
+    long deleteByIdList(@Param("e") Dto e, @Param("idList") List<String> idList);
 
     @UpdateProvider(type = BaseDaoImpl.class, method = "update")
     long update(Dto e);
@@ -36,7 +36,7 @@ public interface BaseDao<Dto extends DtoEntity> extends AbstractBaseDao<Dto> {
     @UpdateProvider(type = BaseDaoImpl.class, method = "updateBySample")
     long updateBySample(@Param("e") Dto e, @Param("sample") Dto sample);
     @UpdateProvider(type = BaseDaoImpl.class, method = "updateByIdList")
-    long updateByIdList(@Param("e") Dto e, @Param("idList") List idList);
+    long updateByIdList(@Param("e") Dto e, @Param("idList") List<String> idList);
 
     @SelectProvider(type = BaseDaoImpl.class, method = "findById")
     Dto findById(Dto e);
