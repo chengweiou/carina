@@ -24,6 +24,7 @@ import chengweiou.universe.carina.model.Push;
 import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.service.message.MsgService;
+import chengweiou.universe.carina.service.person.PersonDio;
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -33,6 +34,8 @@ public class TextHandler extends TextWebSocketHandler {
     private MsgService msgService;
     @Autowired
     private PushManager pushManager;
+    @Autowired
+    private PersonDio personDio;
 
     // todo 如何定时判断前端还在连接着？否则删除节约内存
     // 定时检查记录时间，如果收到ping，刷新时间？
@@ -86,7 +89,8 @@ public class TextHandler extends TextWebSocketHandler {
                 if (targetSession != null) targetSession.sendMessage(new TextMessage(rest));
                 targetSession = PHONE_SESSION_MAP.get(e.getPerson().getId());
                 if (targetSession != null) targetSession.sendMessage(new TextMessage(rest));
-                pushManager.pushAsync(Builder.set("person", e.getPerson()).set("name", e.getSender().getName()).set("content", e.getV()).to(new Push()));
+                Person person = personDio.findById(e.getPerson());
+                pushManager.pushAsync(Builder.set("person", e.getPerson()).set("name", e.getSender().getName()).set("content", e.getV()).set("notifyType", "chat").set("num", person.getUnread()).to(new Push()));
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

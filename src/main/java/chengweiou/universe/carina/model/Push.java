@@ -13,6 +13,8 @@ public class Push implements NotNullObj, Serializable {
     private String topic;
     private String name;
     private String content;
+    private String notifyType;
+    private Integer num;
     public static final Push NULL = new Push.Null();
     public static class Null extends Push implements NullObj {
     }

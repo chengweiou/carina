@@ -21,6 +21,7 @@ import chengweiou.universe.carina.manager.PushManager;
 import chengweiou.universe.carina.model.Push;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.history.History;
+import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.service.message.MsgService;
 import chengweiou.universe.carina.service.person.PersonDio;
 
@@ -46,7 +47,8 @@ public class MsgController {
         List<History> list = service.send(e);
         list.parallelStream().forEach(each -> {
             try {
-                pushManager.pushAsync(Builder.set("person", each.getPerson()).set("name", each.getSender().getName()).set("content", each.getV()).to(new Push()));
+                Person person = personDio.findById(each.getPerson());
+                pushManager.pushAsync(Builder.set("person", each.getPerson()).set("name", each.getSender().getName()).set("content", each.getV()).set("notifyType", "chat").set("num", person.getUnread()).to(new Push()));
             } catch (FailException e1) {
                 e1.printStackTrace();
             }

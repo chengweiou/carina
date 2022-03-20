@@ -32,6 +32,8 @@ public class PushService {
         paramList.add("person.id=" + e.getPerson().getId());
         paramList.add("name=" + e.getName());
         paramList.add("content=" + e.getContent());
+        paramList.add("notifyType=" + e.getNotifyType());
+        paramList.add("num=" + e.getNum());
         if (e.getTopic()!=null) paramList.add("topic=" + e.getTopic());
         String param = paramList.stream().collect(Collectors.joining("&"));
 
