@@ -1,10 +1,10 @@
-package chengweiou.universe.carina.sdk;
+package chengweiou.universe.carina.sdk.push;
 
 
 import chengweiou.universe.blackhole.model.BasicRestCode;
 import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.util.LogUtil;
-import chengweiou.universe.carina.model.Push;
+import chengweiou.universe.carina.sdk.SiteConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +35,7 @@ public class PushService {
         if (e.getNotifyType()!=null) paramList.add("notifyType=" + e.getNotifyType());
         if (e.getNum()!=null) paramList.add("num=" + e.getNum());
         if (e.getTopic()!=null) paramList.add("topic=" + e.getTopic());
+        if (e.getPushInApp()!=null) paramList.add("pushInApp=" + e.getPushInApp());
         String param = paramList.stream().collect(Collectors.joining("&"));
 
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(siteConfig.getLeob() + "/mg/push")).timeout(Duration.ofMinutes(2))

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.blackhole.model.BasicRestCode;
 import chengweiou.universe.blackhole.model.Rest;
-import chengweiou.universe.carina.model.Push;
-import chengweiou.universe.carina.sdk.PushService;
+import chengweiou.universe.carina.sdk.push.Push;
+import chengweiou.universe.carina.sdk.push.PushService;
 
 @Service
 public class PushManager {
