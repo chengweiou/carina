@@ -25,7 +25,6 @@ import chengweiou.universe.carina.service.person.PersonDio;
 import chengweiou.universe.carina.service.room.PersonRoomRelateDio;
 import chengweiou.universe.carina.service.room.RoomService;
 
-// test 需要吧service task 变为dio
 @SpringBootTest
 @ActiveProfiles("test")
 public class MsgTest {
@@ -78,7 +77,6 @@ public class MsgTest {
 
 	@Test
 	public void readNoServerHistory() throws FailException, ProjException, InterruptedException {
-		// todo 现在要看这条记录是什么时候进来的2
 		List<History> indbHistoryList1 = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(0, indbHistoryList1.size());
 		config.setServerHistory(false);
@@ -205,7 +203,6 @@ public class MsgTest {
 
 	@Test
 	public void clearByRoomServerHistory() throws FailException, ProjException, InterruptedException {
-		// todo 现在要看这条记录是什么时候进来的
 		List<History> indbHistoryList1 = historyDio.find(new SearchCondition(), Builder.set("person", data.personList.get(1)).set("room", data.roomList.get(1)).to(new History()));
 		Assertions.assertEquals(0, indbHistoryList1.size());
 		config.setServerHistory(true);

@@ -19,10 +19,6 @@ public class PersonDio extends BaseDio<Person, Dto> {
     @Override
     protected PersonDao getDao() { return dao; }
     @Override
-    protected Class getTClass() { return Person.class; };
-    @Override
-    protected String getDefaultSort() { return "updateAt"; };
-    @Override
     protected String baseFind(AbstractSearchCondition searchCondition, Dto sample) {
         return new BaseSQL() {{
             if (searchCondition.getK() != null) WHERE("""

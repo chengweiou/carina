@@ -19,10 +19,6 @@ public class RoomDio extends BaseDio<Room, Dto> {
     @Override
     protected RoomDao getDao() { return dao; }
     @Override
-    protected Class getTClass() { return Room.class; };
-    @Override
-    protected String getDefaultSort() { return "updateAt"; };
-    @Override
     protected String baseFind(AbstractSearchCondition searchCondition, Dto sample) {
         return new BaseSQL() {{
             if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");

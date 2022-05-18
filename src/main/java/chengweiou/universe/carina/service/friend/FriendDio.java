@@ -19,10 +19,6 @@ public class FriendDio extends BaseDio<Friend, Dto> {
     @Override
     protected FriendDao getDao() { return dao; }
     @Override
-    protected Class getTClass() { return Friend.class; };
-    @Override
-    protected String getDefaultSort() { return "updateAt"; };
-    @Override
     protected String baseFind(AbstractSearchCondition searchCondition, Dto sample) {
         return new BaseSQL() {{
             if (searchCondition.getIdList() != null) WHERE("id in ${searchCondition.foreachIdList}");

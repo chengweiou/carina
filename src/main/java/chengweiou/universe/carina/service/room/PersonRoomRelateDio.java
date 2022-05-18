@@ -8,22 +8,20 @@ import org.springframework.stereotype.Component;
 
 import chengweiou.universe.blackhole.dao.BaseDio;
 import chengweiou.universe.blackhole.dao.BaseSQL;
+import chengweiou.universe.blackhole.dao.DioCache;
 import chengweiou.universe.blackhole.model.AbstractSearchCondition;
 import chengweiou.universe.carina.dao.room.PersonRoomRelateDao;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate.Dto;
 
+@DioCache(false) // todo 这个可以用cache，但要先处理 两个update 之后 cache的问题
 @Component
 public class PersonRoomRelateDio extends BaseDio<PersonRoomRelate, Dto> {
     @Autowired
     private PersonRoomRelateDao dao;
     @Override
     protected PersonRoomRelateDao getDao() { return dao; }
-    @Override
-    protected Class getTClass() { return PersonRoomRelate.class; };
-    @Override
-    protected String getDefaultSort() { return "updateAt"; };
     @Override
     protected String baseFind(AbstractSearchCondition searchCondition, Dto sample) {
         return new BaseSQL() {{

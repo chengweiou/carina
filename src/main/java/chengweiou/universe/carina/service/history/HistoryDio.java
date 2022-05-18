@@ -6,22 +6,20 @@ import org.springframework.stereotype.Component;
 
 import chengweiou.universe.blackhole.dao.BaseDio;
 import chengweiou.universe.blackhole.dao.BaseSQL;
+import chengweiou.universe.blackhole.dao.DioCache;
 import chengweiou.universe.blackhole.model.AbstractSearchCondition;
 import chengweiou.universe.carina.dao.history.HistoryDao;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.model.entity.history.History.Dto;
 
+@DioCache(false)
 @Component
 public class HistoryDio extends BaseDio<History, Dto> {
     @Autowired
     private HistoryDao dao;
     @Override
     protected HistoryDao getDao() { return dao; }
-    @Override
-    protected Class getTClass() { return History.class; };
-    @Override
-    protected String getDefaultSort() { return "updateAt"; };
     @Override
     protected String baseFind(AbstractSearchCondition searchCondition, Dto sample) {
         return new BaseSQL() {{

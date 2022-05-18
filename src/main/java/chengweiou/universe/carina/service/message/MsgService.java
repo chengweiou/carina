@@ -152,6 +152,7 @@ public class MsgService {
     public List<History> read(SearchCondition searchCondition, Person person, Room room) throws FailException {
         // 读取本房间 未读
         List<History> result = historyDio.find(Builder.set("limit", 0).to(new SearchCondition()), Builder.set("person", person).set("room", room).set("unread", true).to(new History()));
+        if (result.isEmpty()) return result;
         // // 服务端保存，则 本房间消息更新为 已读。否则 删除已读取记录
         if (config.getServerHistory()) {
             // 服务端保存，则 本房间消息更新为 已读
