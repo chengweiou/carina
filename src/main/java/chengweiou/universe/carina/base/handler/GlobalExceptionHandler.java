@@ -23,15 +23,15 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 
     @ExceptionHandler(ProjException.class)
     public Rest handleProjException(ProjException ex) {
-        return super.handleException(ex);
-    }
-    @ExceptionHandler(UnauthException.class)
-    public Rest handleUnauthException(UnauthException ex) {
-        return Rest.fail(BasicRestCode.UNAUTH);
+        return super.handleProjException(ex);
     }
     @ExceptionHandler(ParamException.class)
     public Rest handleParamException(ParamException ex) {
         return super.handleParamException(ex);
+    }
+    @ExceptionHandler(UnauthException.class)
+    public Rest handleUnauthException(UnauthException ex) {
+        return Rest.fail(BasicRestCode.UNAUTH);
     }
     @ExceptionHandler(BindException.class)
     public Rest handleParamException(BindException ex) {
