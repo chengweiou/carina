@@ -31,7 +31,8 @@ public class PersonControllerMg {
     public Rest<Long> save(Person e) throws ParamException, FailException, ProjException {
         Valid.check("person.id", e.getId()).is().positive();
         Valid.check("person.name", e.getName()).is().lengthIn(100);
-        service.save(e);
+        e.setUnread(0);
+        dio.save(e);
         return Rest.ok(e.getId());
     }
 
@@ -42,13 +43,10 @@ public class PersonControllerMg {
         return Rest.ok(true);
     }
     @PutMapping("/person/{id}")
-    public Rest<Boolean> update(Person e) throws ParamException {
+    public Rest<Boolean> update(Person e) throws ParamException, FailException {
         Valid.check("person.id", e.getId()).is().positive();
         Valid.check("person.name | imgsrc | unread", e.getName(), e.getImgsrc(), e.getUnread()).are().notAllNull();
-        boolean success = dio.update(e) == 1;
-        if (success) {
-            if (e.getName() != null || e.getImgsrc() != null) personRoomRelateTask.updateSoloOtherByPerson(e);
-        }
+        boolean success = service.update(e);
         return Rest.ok(success);
     }
 

@@ -44,7 +44,7 @@ public class HistoryControllerMg {
         return Rest.ok(true);
     }
     @PutMapping("/history/{id}")
-    public Rest<Boolean> update(History e) throws ParamException {
+    public Rest<Boolean> update(History e) throws ParamException, FailException {
         Valid.check("history.id", e.getId()).is().positive();
         Valid.check("history.person | room | sender | type | v",
                 e.getPerson(), e.getRoom(), e.getType(), e.getV()).are().notAllNull();

@@ -51,7 +51,7 @@ public class HistoryTest {
 	}
 
 	@Test
-	public void update() {
+	public void update() throws FailException {
 		String old = data.historyList.get(0).getV();
 		History e = Builder.set("id", data.historyList.get(0).getId()).set("v", "service update").to(new History());
 		long count = dio.update(e);
@@ -63,7 +63,7 @@ public class HistoryTest {
 	}
 
 	@Test
-	public void updateRead() {
+	public void updateRead() throws FailException {
 		History e = Builder.set("room", data.roomList.get(0)).set("person", data.personList.get(0)).to(new History());
 		long count = service.updateReadByPersonAndRoom(e);
 		Assertions.assertEquals(1, count);

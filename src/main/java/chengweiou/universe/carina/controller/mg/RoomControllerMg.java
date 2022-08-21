@@ -40,7 +40,7 @@ public class RoomControllerMg {
         return Rest.ok(true);
     }
     @PutMapping("/room/{id}")
-    public Rest<Boolean> update(Room e) throws ParamException {
+    public Rest<Boolean> update(Room e) throws ParamException, FailException {
         Valid.check("room.id", e.getId()).is().positive();
         Valid.check("room.personIdList", e.getPersonIdList()).isNotNull();
         boolean success = dio.update(e) == 1;

@@ -45,6 +45,8 @@ public interface BaseDao<Dto extends DtoEntity> extends AbstractBaseDao<Dto> {
     long countByKey(Dto e);
     @SelectProvider(type = BaseDaoImpl.class, method = "findByKey")
     Dto findByKey(Dto e);
+    @SelectProvider(type = BaseDaoImpl.class, method = "countByKeyCheckExist")
+    long countByKeyCheckExist(Dto e);
 
     @SelectProvider(type = BaseDaoImpl.class, method = "count")
     long count(@Param("searchCondition") AbstractSearchCondition searchCondition, @Param("sample") Dto sample, @Param("where") String where);

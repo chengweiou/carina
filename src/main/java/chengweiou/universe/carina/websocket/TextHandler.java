@@ -46,13 +46,12 @@ public class TextHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         Person person = (Person) session.getAttributes().get("user");
         switch (getDeviceType(session)) {
-            case COMPUTER: {
+            case COMPUTER -> {
                 // 切换设备
                 if (PC_SESSION_MAP.containsKey(person.getId())) PC_SESSION_MAP.get(person.getId()).close(new CloseStatus(4001, "多点登陆, 被踢下线"));
                 PC_SESSION_MAP.put(person.getId(), session);
-                break;
             }
-            default: {
+            default -> {
                 if (PHONE_SESSION_MAP.containsKey(person.getId())) PHONE_SESSION_MAP.get(person.getId()).close(new CloseStatus(4001, "多点登陆, 被踢下线"));
                 PHONE_SESSION_MAP.put(person.getId(), session);
             }
@@ -102,8 +101,8 @@ public class TextHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         Person person = (Person) session.getAttributes().get("user");
         switch (getDeviceType(session)) {
-            case COMPUTER: PC_SESSION_MAP.remove(person.getId(), session); break;
-            default: PHONE_SESSION_MAP.remove(person.getId(), session);
+            case COMPUTER -> PC_SESSION_MAP.remove(person.getId(), session);
+            default -> PHONE_SESSION_MAP.remove(person.getId(), session);
         }
         super.afterConnectionClosed(session, status);
     }

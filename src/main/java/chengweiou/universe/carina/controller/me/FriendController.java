@@ -32,7 +32,7 @@ public class FriendController {
         Valid.check("friend.target", e.getTarget()).isNotNull();
         Valid.check("friend.target.id", e.getTarget().getId()).is().positive();
         e.setPerson(loginAccount.getPerson());
-        service.saveOrUpdate(e);
+        dio.saveOrUpdateByKey(e);
         return Rest.ok(e.getId());
     }
 

@@ -38,7 +38,7 @@ public class FriendTest {
 	}
 
 	@Test
-	public void update() {
+	public void update() throws FailException {
 		Person old = data.friendList.get(0).getTarget();
 		Friend e = Builder.set("id", data.friendList.get(0).getId()).set("target", Builder.set("id", 30).to(new Person())).to(new Friend());
 		long count = dio.update(e);
@@ -52,9 +52,9 @@ public class FriendTest {
 	@Test
 	public void saveOrUpdate() throws FailException, ProjException {
 		Friend e1 = Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend());
-		service.saveOrUpdate(e1);
+		dio.saveOrUpdateByKey(e1);
 		Friend e2 = Builder.set("person", data.personList.get(0)).set("target", data.personList.get(2)).to(new Friend());
-		service.saveOrUpdate(e2);
+		dio.saveOrUpdateByKey(e2);
 		Assertions.assertEquals(true, e1.getId()> 0);
 		Assertions.assertEquals(e2.getId(), e1.getId());
 		dio.delete(e2);

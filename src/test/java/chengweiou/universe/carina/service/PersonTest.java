@@ -35,13 +35,13 @@ public class PersonTest {
 	@Test
 	public void saveDelete() throws FailException {
 		Person e = Builder.set("id", 20).set("name", "service test").to(new Person());
-		service.save(e);
+		dio.save(e);
 		Assertions.assertEquals(true, e.getId()> 0);
 		dio.delete(e);
 	}
 
 	@Test
-	public void update() {
+	public void update() throws FailException {
 		String old = data.personList.get(0).getName();
 		Person e = Builder.set("id", data.personList.get(0).getId()).set("name", "service update").to(new Person());
 		long count = dio.update(e);
@@ -53,7 +53,7 @@ public class PersonTest {
 	}
 
 	@Test
-	public void updateTaskUnread() throws ExecutionException, InterruptedException {
+	public void updateTaskUnread() throws ExecutionException, InterruptedException, FailException {
 		String old = data.personList.get(0).getUnread().toString();
 		Person e = Builder.set("id", data.personList.get(0).getId()).set("unread", "10").to(new Person());
 		Future<Long> count = task.update(e);

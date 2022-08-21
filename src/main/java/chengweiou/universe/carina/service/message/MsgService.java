@@ -105,13 +105,12 @@ public class MsgService {
     }
 
     private String getMessageByType(History history) {
-        switch (history.getType()) {
-            case AUDIO: return "[audio]";
-            case IMG: return "[img]";
-            case MAP: return "[map]";
-            case SYS:
-            default: return history.getV();
-        }
+        return switch (history.getType()) {
+            case AUDIO ->  "[audio]";
+            case IMG ->  "[img]";
+            case MAP ->  "[map]";
+            case TEXT, SYS ->  history.getV();
+        };
     }
 
     /**

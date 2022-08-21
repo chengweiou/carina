@@ -5,15 +5,21 @@ import org.springframework.stereotype.Service;
 
 import chengweiou.universe.blackhole.exception.FailException;
 import chengweiou.universe.carina.model.entity.person.Person;
+import chengweiou.universe.carina.service.room.PersonRoomRelateTask;
 
 @Service
 public class PersonService {
     @Autowired
     private PersonDio dio;
+    @Autowired
+    private PersonRoomRelateTask personRoomRelateTask;
 
-    public void save(Person e) throws FailException {
-        e.setUnread(0);
-        dio.save(e);
+    public boolean update(Person e) throws FailException {
+        boolean success = dio.update(e) == 1;
+        if (success) {
+            if (e.getName() != null || e.getImgsrc() != null) personRoomRelateTask.updateSoloOtherByPerson(e);
+        }
+        return success;
     }
 
 }

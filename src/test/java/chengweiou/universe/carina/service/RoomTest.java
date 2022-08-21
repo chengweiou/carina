@@ -43,7 +43,7 @@ public class RoomTest {
 	}
 
 	@Test
-	public void update() {
+	public void update() throws FailException {
 		List<Long> old = data.roomList.get(0).getPersonIdList();
 		Room e = Builder.set("id", data.roomList.get(0).getId()).set("personIdList", Arrays.asList(100L)).to(new Room());
 		long count = dio.update(e);

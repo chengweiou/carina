@@ -43,7 +43,7 @@ public class FriendControllerMg {
         return Rest.ok(true);
     }
     @PutMapping("/friend/{id}")
-    public Rest<Boolean> update(Friend e) throws ParamException {
+    public Rest<Boolean> update(Friend e) throws ParamException, FailException {
         Valid.check("friend.id", e.getId()).is().positive();
         Valid.check("friend.person | target", e.getPerson(), e.getTarget()).are().notAllNull();
         boolean success = dio.update(e) == 1;
