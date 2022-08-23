@@ -32,7 +32,7 @@ public class PushService {
         paramList.add("person.id=" + e.getPerson().getId());
         paramList.add("name=" + e.getName());
         paramList.add("content=" + e.getContent());
-        if (e.getNotifyType()!=null) paramList.add("notifyType=" + e.getNotifyType());
+        if (e.getPushSpecType()!=null) paramList.add("pushSpecType=" + e.getPushSpecType());
         if (e.getNum()!=null) paramList.add("num=" + e.getNum());
         if (e.getTopic()!=null) paramList.add("topic=" + e.getTopic());
         if (e.getPushInApp()!=null) paramList.add("pushInApp=" + e.getPushInApp());

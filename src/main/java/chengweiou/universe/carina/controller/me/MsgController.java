@@ -48,7 +48,7 @@ public class MsgController {
         list.parallelStream().forEach(each -> {
             try {
                 Person person = personDio.findById(each.getPerson());
-                pushManager.pushAsync(Builder.set("person", each.getPerson()).set("name", each.getSender().getName()).set("content", each.getV()).set("notifyType", "chat").set("num", person.getUnread()).to(new Push()));
+                pushManager.pushAsync(Builder.set("person", each.getPerson()).set("name", each.getSender().getName()).set("content", each.getV()).set("pushSpecType", "chat").set("num", person.getUnread()).to(new Push()));
             } catch (FailException e1) {
                 e1.printStackTrace();
             }

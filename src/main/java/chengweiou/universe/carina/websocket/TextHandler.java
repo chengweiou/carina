@@ -89,7 +89,7 @@ public class TextHandler extends TextWebSocketHandler {
                 targetSession = PHONE_SESSION_MAP.get(e.getPerson().getId());
                 if (targetSession != null) targetSession.sendMessage(new TextMessage(rest));
                 Person person = personDio.findById(e.getPerson());
-                pushManager.pushAsync(Builder.set("person", e.getPerson()).set("name", e.getSender().getName()).set("content", e.getV()).set("notifyType", "chat").set("num", person.getUnread()).to(new Push()));
+                pushManager.pushAsync(Builder.set("person", e.getPerson()).set("name", e.getSender().getName()).set("content", e.getV()).set("pushSpecType", "chat").set("num", person.getUnread()).to(new Push()));
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
