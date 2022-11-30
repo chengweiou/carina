@@ -1,14 +1,14 @@
 package chengweiou.universe.carina.service.history;
 
-import chengweiou.universe.blackhole.exception.FailException;
-import chengweiou.universe.carina.model.entity.history.History;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.concurrent.Future;
+import chengweiou.universe.blackhole.exception.FailException;
+import chengweiou.universe.carina.model.entity.history.History;
 
 @Service
 public class HistoryTask {
@@ -16,8 +16,8 @@ public class HistoryTask {
     private HistoryDio dio;
 
     @Async
-    public Future<Long> deleteByList(List<History> list) throws FailException {
+    public CompletableFuture<Long> deleteByList(List<History> list) throws FailException {
         dio.deleteByIdList(list.stream().map(e -> e.getId().toString()).toList());
-        return new AsyncResult<>(null);
+        return CompletableFuture.completedFuture(null);
     }
 }

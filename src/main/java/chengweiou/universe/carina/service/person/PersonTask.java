@@ -1,13 +1,13 @@
 package chengweiou.universe.carina.service.person;
 
-import chengweiou.universe.blackhole.exception.FailException;
-import chengweiou.universe.carina.model.entity.person.Person;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.Future;
+import chengweiou.universe.blackhole.exception.FailException;
+import chengweiou.universe.carina.model.entity.person.Person;
 
 @Service
 public class PersonTask {
@@ -15,8 +15,8 @@ public class PersonTask {
     private PersonDio dio;
 
     @Async
-    public Future<Long> update(Person e) throws FailException {
+    public CompletableFuture<Long> update(Person e) throws FailException {
         long count = dio.update(e);
-        return new AsyncResult<>(count);
+        return CompletableFuture.completedFuture(count);
     }
 }

@@ -1,19 +1,18 @@
 package chengweiou.universe.carina.service.room;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
 import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.carina.model.SearchCondition;
 import chengweiou.universe.carina.model.entity.person.Person;
 import chengweiou.universe.carina.model.entity.room.PersonRoomRelate;
 import chengweiou.universe.carina.model.entity.room.Room;
 import chengweiou.universe.carina.model.entity.room.RoomType;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.concurrent.Future;
 
 @Service
 public class PersonRoomRelateTask {
@@ -23,9 +22,9 @@ public class PersonRoomRelateTask {
     private RoomDio roomDio;
 
     @Async
-    public Future<Long> update(PersonRoomRelate e) {
+    public CompletableFuture<Long> update(PersonRoomRelate e) {
         long count = dio.update(e);
-        return new AsyncResult<>(count);
+        return CompletableFuture.completedFuture(count);
     }
 
     /**
@@ -33,7 +32,7 @@ public class PersonRoomRelateTask {
      * @param e
      * @return
      */
-    public Future<Long> updateSoloOtherByPerson(Person person) {
+    public CompletableFuture<Long> updateSoloOtherByPerson(Person person) {
         // 通过personid，获取房间id
         List<PersonRoomRelate> list = dio.findRoomId(
             Builder.set("limit", 0).to(new SearchCondition()),
@@ -50,6 +49,6 @@ public class PersonRoomRelateTask {
             Builder.set("person", person).set("name", person.getName()).set("imgsrc", person.getImgsrc()).to(new PersonRoomRelate()),
             Builder.set("limit", 0).set("idList", soloRoomIdList).to(new SearchCondition())
             );
-        return new AsyncResult<>(count);
+        return CompletableFuture.completedFuture(count);
     }
 }
