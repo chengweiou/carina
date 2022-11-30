@@ -7,7 +7,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -16,16 +17,15 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import chengweiou.universe.blackhole.exception.UnauthException;
 import chengweiou.universe.blackhole.model.Builder;
-import chengweiou.universe.blackhole.util.LogUtil;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.model.entity.person.Person;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class JwtUtil {
     @Autowired
     private JwtConfig config;
@@ -45,7 +45,7 @@ public class JwtUtil {
                 .sign(algorithm);
         } catch (JWTCreationException exception){
             //Invalid Signing configuration / Couldn't convert Claims.
-            LogUtil.e("fail to sign jwt", exception);
+            log.error("fail to sign jwt", exception);
             return "";
         }
     }
@@ -96,7 +96,7 @@ public class JwtUtil {
                 rsaPublicKey = (RSAPublicKey) JwtPemUtils.readPublicKeyFromFile(config.getRsaPublicPath(), "RSA");
                 rsaPrivateKey = (RSAPrivateKey) JwtPemUtils.readPrivateKeyFromFile(config.getRsaPrivatePath(), "RSA");
             } catch (IOException exception) {
-                LogUtil.e("fail to read jwt public | private key file.", exception);
+                log.error("fail to read jwt public | private key file.", exception);
                 throw exception;
             }
         }

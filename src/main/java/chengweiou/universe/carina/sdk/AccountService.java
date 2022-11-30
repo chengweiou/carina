@@ -1,13 +1,6 @@
 package chengweiou.universe.carina.sdk;
 
 
-import chengweiou.universe.blackhole.model.BasicRestCode;
-import chengweiou.universe.blackhole.model.Rest;
-import chengweiou.universe.blackhole.util.LogUtil;
-import chengweiou.universe.carina.base.converter.Account;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,7 +11,16 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import chengweiou.universe.blackhole.model.BasicRestCode;
+import chengweiou.universe.blackhole.model.Rest;
+import chengweiou.universe.carina.base.converter.Account;
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class AccountService {
     @Autowired
     private SiteConfig siteConfig;
@@ -39,7 +41,7 @@ public class AccountService {
             String response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::body).get();
             return Rest.from(response, Long.class);
         } catch (InterruptedException | ExecutionException ex) {
-            LogUtil.e("account save fail", ex);
+            log.error("account save fail", ex);
             return Rest.fail(BasicRestCode.FAIL);
         }
     }

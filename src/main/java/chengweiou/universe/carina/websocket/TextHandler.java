@@ -18,7 +18,6 @@ import chengweiou.universe.blackhole.model.Builder;
 import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.param.Valid;
 import chengweiou.universe.blackhole.util.GsonUtil;
-import chengweiou.universe.blackhole.util.LogUtil;
 import chengweiou.universe.carina.manager.PushManager;
 import chengweiou.universe.carina.model.entity.history.History;
 import chengweiou.universe.carina.model.entity.person.Person;
@@ -27,8 +26,10 @@ import chengweiou.universe.carina.service.message.MsgService;
 import chengweiou.universe.carina.service.person.PersonDio;
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class TextHandler extends TextWebSocketHandler {
     @Autowired
     private MsgService msgService;
@@ -114,14 +115,14 @@ public class TextHandler extends TextWebSocketHandler {
 
     @Override
     protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
-        LogUtil.i("handlePongMessage");
+        log.info("handlePongMessage");
 
         super.handlePongMessage(session, message);
     }
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        LogUtil.i("handleTransportError");
+        log.info("handleTransportError");
         super.handleTransportError(session, exception);
     }
 

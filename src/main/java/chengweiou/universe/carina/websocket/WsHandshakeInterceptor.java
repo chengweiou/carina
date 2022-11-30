@@ -11,13 +11,14 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import chengweiou.universe.blackhole.exception.UnauthException;
-import chengweiou.universe.blackhole.util.LogUtil;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.base.jwt.JwtUtil;
 import chengweiou.universe.carina.service.person.PersonDio;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableWebSocket
+@Slf4j
 public class WsHandshakeInterceptor implements HandshakeInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
@@ -33,7 +34,7 @@ public class WsHandshakeInterceptor implements HandshakeInterceptor {
             // tip: 推送消息的时候要名字
             attributes.put("user", personDio.findById(account.getPerson()));
         } catch (UnauthException ex) {
-            LogUtil.i("ws handshake fail: token: " + token);
+            log.info("ws handshake fail: token: " + token);
             return false;
         }
         return true;

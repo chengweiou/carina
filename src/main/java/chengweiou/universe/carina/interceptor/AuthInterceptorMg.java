@@ -1,18 +1,18 @@
 package chengweiou.universe.carina.interceptor;
 
+import java.io.IOException;
+import java.util.Arrays;
+
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
+
 import chengweiou.universe.blackhole.model.BasicRestCode;
 import chengweiou.universe.blackhole.model.Rest;
 import chengweiou.universe.blackhole.util.GsonUtil;
 import chengweiou.universe.carina.base.converter.Account;
 import chengweiou.universe.carina.model.entity.person.PersonType;
-import com.google.gson.Gson;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Arrays;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class AuthInterceptorMg implements HandlerInterceptor {
     @Override

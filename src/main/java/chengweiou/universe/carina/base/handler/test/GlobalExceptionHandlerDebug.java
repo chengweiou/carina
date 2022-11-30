@@ -15,10 +15,11 @@ import chengweiou.universe.blackhole.exception.ProjException;
 import chengweiou.universe.blackhole.exception.UnauthException;
 import chengweiou.universe.blackhole.model.BasicRestCode;
 import chengweiou.universe.blackhole.model.Rest;
-import chengweiou.universe.blackhole.util.LogUtil;
+import lombok.extern.slf4j.Slf4j;
 
 @Profile("!prod")
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandlerDebug extends BaseExceptionHandlerDebug {
 
     @ExceptionHandler(ProjException.class)
@@ -33,7 +34,7 @@ public class GlobalExceptionHandlerDebug extends BaseExceptionHandlerDebug {
     public Rest handleUnauthException(UnauthException ex) {
         Rest rest = Rest.fail(BasicRestCode.UNAUTH);
         rest.setMessage(ex.getMessage());
-        LogUtil.e(rest.toString(), ex);
+        log.error(rest.toString(), ex);
         return rest;
     }
     @ExceptionHandler(BindException.class)
@@ -52,7 +53,7 @@ public class GlobalExceptionHandlerDebug extends BaseExceptionHandlerDebug {
     public Rest handleException(HttpRequestMethodNotSupportedException ex) {
         Rest rest = Rest.fail(BasicRestCode.FAIL);
         rest.setMessage(ex.getMessage());
-        LogUtil.i(ex.getMessage(), ex);
+        log.info(ex.getMessage(), ex);
         return rest;
     }
     @ExceptionHandler(FailException.class)
